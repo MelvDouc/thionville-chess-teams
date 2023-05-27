@@ -1,0 +1,33 @@
+import { db, ObjectId, type Filter } from "$lib/server/database.js";
+
+const getPlayer = async (filter: Filter<App.Player>) => {
+  const player = await db.players.findOne(filter);
+  if (player?.birthDate) player.birthDate = new Date(player.birthDate);
+  return player;
+};
+
+const getPlayers = () => {
+  return db.players
+    .find()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .map(({ _id, birthDate, pwd, pwdResetId, ...others }) => ({
+      birthDate: birthDate ? new Date(birthDate) : null,
+      ...others
+    }))
+    .toArray();
+};
+
+const createPlayer = (data: App.Player) => {
+  return db.players.insertOne(data);
+};
+
+const replacePlayer = (id: string, data: App.Player) => {
+  return db.players.replaceOne({ _id: new ObjectId(id) }, data);
+};
+
+export default {
+  getPlayer,
+  getPlayers,
+  createPlayer,
+  replacePlayer,
+};
