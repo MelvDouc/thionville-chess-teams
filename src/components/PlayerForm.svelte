@@ -2,6 +2,7 @@
   import FormGroup from "$components/FormGroup.svelte";
   import PlayerRoles from "$lib/PlayerRoles.js";
 
+  export let isUpdate: boolean;
   export let player: App.Player | null;
   export let handleSubmit: (data: App.Player) => void | Promise<void>;
 
@@ -23,6 +24,7 @@
       <FormGroup
         id="ffe-id"
         pattern="A-Z\d+"
+        disabled={isUpdate}
         placeholder="Une lettre majuscule suivie de chiffres"
         bind:value={data.ffeId}>Code FFE</FormGroup
       >

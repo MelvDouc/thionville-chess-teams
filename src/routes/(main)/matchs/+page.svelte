@@ -1,4 +1,6 @@
 <script lang="ts">
+  import PlusButton from "$components/PlusButton.svelte";
+
   export let data: { seasons: number[] };
 </script>
 
@@ -17,9 +19,7 @@
 </section>
 
 <section>
-  <a href="/matchs/nouveau" class="btn btn-secondary">
-    <i class="bi bi-plus-lg" /> Nouveau match
-  </a>
+  <PlusButton link="/matchs/nouveau">Créer un match</PlusButton>
 </section>
 
 <style lang="scss" scoped>
@@ -30,9 +30,5 @@
       list-style-type: disclosure-closed;
       list-style-position: inside;
     }
-  }
-
-  .bi {
-    margin-inline-end: 0.5em;
   }
 </style>

@@ -16,4 +16,5 @@
     const updateResult = await update("players", ffeId, data);
     console.log(updateResult);
   }}
+  isUpdate
 />
