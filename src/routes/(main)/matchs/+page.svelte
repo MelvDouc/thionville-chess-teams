@@ -6,7 +6,7 @@
   <title>Matchs par saison</title>
 </svelte:head>
 
-<div>
+<section class="top">
   <ul>
     {#each data.seasons as season}
       <li>
@@ -14,17 +14,25 @@
       </li>
     {/each}
   </ul>
-</div>
+</section>
 
-<div>
+<section>
   <a href="/matchs/nouveau" class="btn btn-secondary">
     <i class="bi bi-plus-lg" /> Nouveau match
   </a>
-</div>
+</section>
 
-<style scoped>
-  ul {
-    list-style-type: disclosure-closed;
-    list-style-position: inside;
+<style lang="scss" scoped>
+  .top {
+    margin-bottom: 2em;
+
+    ul {
+      list-style-type: disclosure-closed;
+      list-style-position: inside;
+    }
+  }
+
+  .bi {
+    margin-inline-end: 0.5em;
   }
 </style>

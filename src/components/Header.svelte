@@ -1,6 +1,11 @@
 <header>
   <section class="header-left">
-    <img src="http://thionville-echecs.fr/wp-content/uploads/2022/05/cropped-logo-blanc2x-192x192.png" alt="Logo" width="30" height="30" />
+    <img
+      src="http://thionville-echecs.fr/wp-content/uploads/2022/05/cropped-logo-blanc2x-192x192.png"
+      alt="Logo"
+      width="30"
+      height="30"
+    />
     <h1>Thionville Échecs — Équipes</h1>
   </section>
   <section class="header-right">
@@ -66,7 +71,7 @@
         list-style: none;
         display: flex;
         align-items: center;
-        gap: 0.5em;
+        gap: 0.75em;
 
         a {
           text-decoration: none;

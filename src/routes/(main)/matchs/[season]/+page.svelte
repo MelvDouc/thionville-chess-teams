@@ -45,7 +45,7 @@
           </td>
           <td>{formatDate(m.date)}</td>
           <td>
-            <div class="flex-center gap-2">
+            <div class="table__actions">
               <a href="/matchs/{m.season}/{m.round}/{m.teamName}/modifier" class="btn btn-primary">
                 <i class="bi bi-pen-fill" />
               </a>
