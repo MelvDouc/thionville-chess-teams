@@ -1,0 +1,12 @@
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@for $i from 1 through 6 {
+  .gap-#{$i} {
+    gap: 0.25em * $i;
+  }
+}

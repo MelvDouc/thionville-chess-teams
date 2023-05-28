@@ -18,6 +18,10 @@
     background: blue;
   }
 
+  &.btn-secondary {
+    background: hsl(118, 100%, 28%);
+  }
+
   &.btn-info {
     color: black;
     background-color: hsl(60, 100%, 57%);

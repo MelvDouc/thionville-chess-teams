@@ -45,16 +45,18 @@
           </td>
           <td>{formatDate(m.date)}</td>
           <td>
-            <a href="/matchs/{m.season}/{m.round}/{m.teamName}/modifier" class="btn btn-primary">
-              <i class="bi bi-pen-fill" />
-            </a>
-            <a
-              href="/matchs/{m.season}/{m.round}/{m.teamName}/composition"
-              class="btn btn-info"
-              target="_blank"
-            >
-              <i class="bi bi-table" />
-            </a>
+            <div class="flex-center gap-2">
+              <a href="/matchs/{m.season}/{m.round}/{m.teamName}/modifier" class="btn btn-primary">
+                <i class="bi bi-pen-fill" />
+              </a>
+              <a
+                href="/matchs/{m.season}/{m.round}/{m.teamName}/composition"
+                class="btn btn-info"
+                target="_blank"
+              >
+                <i class="bi bi-table" />
+              </a>
+            </div>
           </td>
         </tr>
       {/each}

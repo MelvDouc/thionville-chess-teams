@@ -24,7 +24,11 @@
         <td>{phone1 ?? ""}</td>
         <td>{rating}</td>
         <td>
-          <a href="/joueurs/{ffeId}/modifier">Modifier</a>
+          <div class="flex-center">
+            <a href="/joueurs/{ffeId}/modifier" class="btn btn-primary">
+              <i class="bi bi-pen-fill" />
+            </a>
+          </div>
         </td>
       </tr>
     {/each}
