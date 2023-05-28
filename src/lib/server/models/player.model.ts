@@ -1,4 +1,4 @@
-import { db, ObjectId, type Filter } from "$lib/server/database.js";
+import { db, type Filter } from "$lib/server/database.js";
 
 const getPlayer = async (filter: Filter<App.Player>) => {
   const player = await db.players.findOne(filter);
@@ -27,13 +27,13 @@ const createPlayer = (data: App.Player) => {
   return db.players.insertOne(data);
 };
 
-const replacePlayer = (id: string, data: App.Player) => {
-  return db.players.replaceOne({ _id: new ObjectId(id) }, data);
+const updatePlayer = (ffeId: string, data: App.Player) => {
+  return db.players.replaceOne({ ffeId }, data);
 };
 
 export default {
   getPlayer,
   getPlayers,
   createPlayer,
-  replacePlayer,
+  updatePlayer,
 };

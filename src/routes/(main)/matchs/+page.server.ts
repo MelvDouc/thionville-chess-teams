@@ -1,6 +1,6 @@
-import { db } from "$lib/server/database.js";
+import matchModel from "$lib/server/models/match.model.js";
 
 export const load = async () => {
-  const seasons = await db.matches.distinct("season");
-  return { seasons: seasons.sort((a, b) => a - b) };
+  const seasons = await matchModel.getSeasons();
+  return { seasons };
 };

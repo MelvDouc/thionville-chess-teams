@@ -62,6 +62,10 @@ const getMatchesBySeasonGroupedByTeamName = (season: number) => {
     .toArray();
 };
 
+const getSeasons = async () => {
+  return (await db.matches.distinct("season")).sort((a, b) => a - b);
+};
+
 const createMatch = (data: App.Match) => {
   return db.matches.insertOne(data);
 };
@@ -74,6 +78,7 @@ export default {
   getMatch,
   getMatches,
   getMatchesBySeasonGroupedByTeamName,
+  getSeasons,
   createMatch,
   updateMatch
 };

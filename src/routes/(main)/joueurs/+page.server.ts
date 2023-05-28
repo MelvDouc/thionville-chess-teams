@@ -1,10 +1,6 @@
-import { db } from "$lib/server/database.js";
+import playerModel from "$lib/server/models/player.model.js";
 
 export const load = async () => {
-  const players = await db.players
-    .find()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .map(({ _id, ...others }) => others)
-    .toArray();
+  const players = await playerModel.getPlayers();
   return { players };
 };

@@ -1,24 +1,20 @@
-import { db } from "$lib/server/database.js";
+import matchModel from "$lib/server/models/match.model.js";
+import playerModel from "$lib/server/models/player.model.js";
 import { error } from "@sveltejs/kit";
 
 export const load = async ({ params: { season, round, teamName } }) => {
-  const match = await db.matches.findOne({
+  const match = await matchModel.getMatch({
     season: +season,
     round: +round,
-    teamName: decodeURI(teamName)
+    teamName
   });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const players = await db.players.find().map(({ _id, ...others }) => others).toArray();
 
   if (!match)
     throw error(404);
 
-  const { _id, ...others } = match;
+  const players = await playerModel.getPlayers();
   return {
-    match: {
-      _id: _id.toHexString(),
-      ...others
-    },
+    match,
     players
   };
 };
