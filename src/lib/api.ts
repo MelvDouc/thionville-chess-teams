@@ -11,7 +11,7 @@ async function getResponse<T>(path: `/${string}`, requestInit?: RequestInit) {
 }
 
 const create = <T>(entity: string, data: T) => {
-  return getResponse(`/${entity}/create`, {
+  return getResponse<InsertResult>(`/${entity}/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -21,7 +21,7 @@ const create = <T>(entity: string, data: T) => {
 };
 
 const update = <T>(entity: string, id: string, data: T) => {
-  return getResponse(`/${entity}/${id}/update`, {
+  return getResponse<UpdateResult>(`/${entity}/${id}/update`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"

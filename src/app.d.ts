@@ -51,6 +51,11 @@ declare global {
 		}
 	}
 
+	type InsertResult = {
+		acknowledged: boolean;
+		insertedId: string;
+	};
+
 	type UpdateResult = {
 		acknowledged: boolean;
 		modifiedCount: number;

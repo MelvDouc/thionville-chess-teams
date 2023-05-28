@@ -1,5 +1,6 @@
 <script lang="ts">
   import PlayerForm from "$components/PlayerForm.svelte";
+  import { update } from "$lib/api.js";
 
   export let data: { player: App.Player };
   const { ffeId } = data.player;
@@ -12,12 +13,7 @@
 <PlayerForm
   player={data.player}
   handleSubmit={async (data) => {
-    const response = await fetch(`/api/v1/players/${ffeId}/update`, {
-      method: "PUT",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const updateResult = await update("players", ffeId, data);
+    console.log(updateResult);
   }}
 />
