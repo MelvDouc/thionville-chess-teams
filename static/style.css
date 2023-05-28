@@ -7,8 +7,3 @@
   padding: 0;
   box-sizing: border-box;
 }
-
-table address {
-  white-space: pre-line;
-  font-style: normal;
-}

@@ -1,0 +1,25 @@
+.btn {
+  all: unset;
+  padding: 0.45em 0.66em;
+  border-radius: 5px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  transition: scale 200ms ease-out;
+
+  &:active {
+    scale: 0.975;
+  }
+
+  &.btn-primary {
+    background: blue;
+  }
+
+  &.btn-info {
+    color: black;
+    background-color: hsl(60, 100%, 57%);
+  }
+}

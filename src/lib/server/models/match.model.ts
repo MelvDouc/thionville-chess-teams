@@ -40,8 +40,18 @@ const pipeLine = [
   }
 ];
 
-const getMatch = (filter: Filter<App.Match>) => {
-  return db.matches.findOne(filter);
+const getMatch = async (filter: Filter<App.Match>) => {
+  const match = await db.matches.findOne(filter);
+
+  if (match) {
+    const { _id, ...others } = match;
+    return {
+      _id: _id.toHexString(),
+      ...others
+    };
+  }
+
+  return null;
 };
 
 const getMatches = (filter: Pick<App.Match, "season" | "round" | "teamName">) => {

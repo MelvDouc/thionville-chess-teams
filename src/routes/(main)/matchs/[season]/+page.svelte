@@ -14,7 +14,9 @@
   <title>Matchs {data.season - 1}-{data.season}</title>
 </svelte:head>
 
-<table>
+<p>Tous les matchs commencent à <strong>14h15</strong>.</p>
+
+<table class="table">
   <thead>
     <tr>
       <th>Rd.</th>
@@ -25,9 +27,9 @@
     </tr>
   </thead>
   {#each data.matches as item}
-    <tbody>
+    <tbody class="table__subtitle-body">
       <tr>
-        <td>{item.teamName}</td>
+        <td colspan={5}>{item.teamName}</td>
       </tr>
     </tbody>
     <tbody>
@@ -37,14 +39,22 @@
           <td>{m.opponent}</td>
           <td>
             <address>
-              <p>{m.address}</p>
-              <p>{m.zipCode} {m.city}</p>
+              <div>{m.address}</div>
+              <div>{m.zipCode} {m.city}</div>
             </address>
           </td>
           <td>{formatDate(m.date)}</td>
           <td>
-            <a href="/matchs/{m.season}/{m.round}/{m.teamName}/modifier">Modifier</a>
-            <a href="/matchs/{m.season}/{m.round}/{m.teamName}/composition" target="_blank">Composition</a>
+            <a href="/matchs/{m.season}/{m.round}/{m.teamName}/modifier" class="btn btn-primary">
+              <i class="bi bi-pen-fill" />
+            </a>
+            <a
+              href="/matchs/{m.season}/{m.round}/{m.teamName}/composition"
+              class="btn btn-info"
+              target="_blank"
+            >
+              <i class="bi bi-table" />
+            </a>
           </td>
         </tr>
       {/each}
