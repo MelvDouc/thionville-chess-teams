@@ -3,6 +3,10 @@
   import { create } from "$lib/api.js";
 </script>
 
+<svelte:head>
+  <title>Créer un joueur</title>
+</svelte:head>
+
 <PlayerForm
   player={null}
   handleSubmit={async (data) => {

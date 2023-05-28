@@ -1,0 +1,10 @@
+@use "colors";
+
+.form {
+  width: min(100%, 700px);
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

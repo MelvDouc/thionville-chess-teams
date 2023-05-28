@@ -18,7 +18,7 @@
       };
 </script>
 
-<form on:submit|preventDefault={() => handleSubmit(data)}>
+<form class="form" on:submit|preventDefault={() => handleSubmit(data)}>
   <article class="form-row">
     <div class="form-group-6">
       <FormGroup
