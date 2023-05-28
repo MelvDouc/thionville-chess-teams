@@ -20,10 +20,17 @@
 <form on:submit|preventDefault={() => handleSubmit(data)}>
   <article class="form-row">
     <div class="form-group-6">
-      <FormGroup id="ffe-id" bind:value={data.ffeId}>Code FFE</FormGroup>
+      <FormGroup
+        id="ffe-id"
+        pattern="A-Z\d+"
+        placeholder="Une lettre majuscule suivie de chiffres"
+        bind:value={data.ffeId}>Code FFE</FormGroup
+      >
     </div>
     <div class="form-group-6">
-      <FormGroup id="fide-id" type="number" bind:value={data.fideId}>N° FIDE</FormGroup>
+      <FormGroup id="fide-id" type="number" bind:value={data.fideId} required={false}
+        >N° FIDE</FormGroup
+      >
     </div>
   </article>
   <article class="form-row">
