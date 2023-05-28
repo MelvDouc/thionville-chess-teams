@@ -92,7 +92,7 @@
   <article class="form-row">
     <LineUpTable {captainFfeId} {lineUpStore} {whiteOnOdds} {players} />
   </article>
-  <article>
+  <article class="form-submit">
     <button type="submit">Valider</button>
   </article>
 </form>

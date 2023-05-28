@@ -2,8 +2,14 @@ import { db, ObjectId, type Filter } from "$lib/server/database.js";
 
 const getPlayer = async (filter: Filter<App.Player>) => {
   const player = await db.players.findOne(filter);
-  if (player?.birthDate) player.birthDate = new Date(player.birthDate);
-  return player;
+  if (!player)
+    return null;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { _id, birthDate, ...others } = player;
+  return {
+    ...others,
+    birthDate: birthDate ? new Date(birthDate) : null
+  };
 };
 
 const getPlayers = () => {
