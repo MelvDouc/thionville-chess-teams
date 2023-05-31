@@ -2,6 +2,7 @@
   import lineUpStore, { getEmptyLineUp } from "$lib/stores/lineup-store.js";
   import { getDatePortion } from "$lib/date-formatter.js";
   import LineUpTable from "$components/LineUpTable.svelte";
+  import FormGroup from "$components/FormGroup.svelte";
 
   export let match: (App.Match & { _id: string }) | null;
   export let players: Omit<App.Player, "pwd" | "pwdResetId">[];
@@ -27,6 +28,7 @@
 </script>
 
 <form
+  class="form"
   on:submit|preventDefault={() =>
     handleSubmit({
       _id,
@@ -45,12 +47,10 @@
 >
   <article class="form-row">
     <div class="form-group-3">
-      <label for="season" class="form-required">Saison</label>
-      <input type="number" id="season" bind:value={season} required />
+      <FormGroup id="season" required bind:value={season}>Saison</FormGroup>
     </div>
     <div class="form-group-4">
-      <label for="round" class="form-required">Ronde</label>
-      <input type="number" id="round" bind:value={round} required />
+      <FormGroup id="round" type="number" required bind:value={round}>Ronde</FormGroup>
     </div>
     <div class="form-group-5">
       <label for="date" class="form-required">Date</label>
@@ -59,12 +59,12 @@
   </article>
   <article class="form-row">
     <div class="form-group-6">
-      <label for="opponent" class="form-required">Adversaire</label>
-      <input type="string" id="opponent" bind:value={opponent} required />
+      <FormGroup id="opponent" required bind:value={opponent}>Adversaire</FormGroup>
     </div>
     <div class="form-group-6">
-      <label for="team-name" class="form-required">Équipe</label>
-      <input type="string" id="team-name" placeholder="Thionville I" bind:value={teamName} required />
+      <FormGroup id="team-name" placeholder="Thionville I" required bind:value={teamName}
+        >Équipe</FormGroup
+      >
     </div>
   </article>
   <article class="form-row">
@@ -73,18 +73,20 @@
       <textarea id="address" bind:value={address} required />
     </div>
     <div class="form-group-6">
-      <div>
-        <label for="city" class="form-required">Ville</label>
-        <input type="text" id="city" bind:value={city} required />
-      </div>
-      <div>
-        <label for="zip-code" class="form-required">Ville</label>
-        <input type="number" id="zip-code" bind:value={zipCode} required />
+      <div class="flex-column gap-2">
+        <div class="flex-column gap-1">
+          <label for="city" class="form-required">Ville</label>
+          <input type="text" id="city" bind:value={city} required />
+        </div>
+        <div class="flex-column gap-1">
+          <label for="zip-code" class="form-required">Code postal</label>
+          <input type="text" id="zip-code" bind:value={zipCode} required />
+        </div>
       </div>
     </div>
   </article>
   <article class="form-row">
-    <div class="form-group-12">
+    <div class="form-checkbox">
       <input type="checkbox" id="white-on-odds" bind:checked={whiteOnOdds} />
       <label for="white-on-odds">Blancs aux échiquiers impairs</label>
     </div>

@@ -2,9 +2,69 @@
 
 .form {
   width: min(100%, 700px);
+  margin: 0 auto;
+  padding: 1em;
+  gap: 1em;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  background-color: colors.$primary;
 
-  .form-row {
+  &-row {
     display: flex;
     flex-wrap: wrap;
+  }
+
+  @for $i from 1 through 12 {
+    .form-group-#{$i} {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+      padding-inline: 0.5em;
+      width: calc(100% / 12 * $i);
+
+    }
+  }
+
+  .form-checkbox {
+    display: flex;
+    align-items: center;
+    padding-inline: 0.5em;
+    gap: 0.5em;
+  }
+
+  input,
+  textarea {
+    font-size: inherit;
+    font-family: inherit;
+    padding: 0.2em 0.25em;
+  }
+
+  input {
+
+    &[type="text"],
+    &[type="email"],
+    &[type="password"],
+    &[type="number"],
+    &[type="search"],
+    &[type="date"] {
+      width: 100%;
+    }
+
+    &[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  textarea {
+    height: 100%;
+    resize: vertical;
   }
 }

@@ -5,6 +5,11 @@
   flex-wrap: wrap;
 }
 
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 @for $i from 1 through 6 {
   .gap-#{$i} {
     gap: 0.25em * $i;
