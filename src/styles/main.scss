@@ -1,47 +1,64 @@
-@use "btn";
-@use "container";
-@use "form";
-@use "table";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400&display=swap");
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
-@import "../../node_modules/bootstrap-icons/font/bootstrap-icons.min.css";
+:root {
+  --page-width: 900px;
+  --header-height: 60px;
+}
 
-#root {
+#App {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr minmax(calc(100vh - var(--header-height)), auto) auto;
   font-family: Montserrat, "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif !important;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  background: url("/img/chess-bg.jpg") center / cover no-repeat;
 
   &::-webkit-scrollbar {
     display: none;
   }
 }
 
-#App {
-  min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  background-color: hsl(0, 0%, 100%, 0.95);
-}
-
-main {
-  padding: 1em;
-  overflow-x: auto;
-}
-
-p {
+h1,
+h2,
+h3,
+h4 {
   margin-bottom: 1em;
 }
 
-input {
-  &[type=number] {
-    appearance: textfield;
-  }
+a {
+  color: inherit;
+}
 
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+ul {
+  list-style-position: inside;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.link-no-hover:hover {
+  color: currentColor;
+}
+
+.list-style-none {
+  list-style: none;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.w--500 {
+  width: min(100%, 500px);
+}
+
+.white-space-pre-wrap {
+  white-space: pre-wrap;
 }
