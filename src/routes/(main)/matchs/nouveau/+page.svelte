@@ -8,4 +8,6 @@
   <title>Créer un match</title>
 </svelte:head>
 
-<MatchForm match={null} players={data.players} handleSubmit={() => {}} />
+<div class="container-center">
+  <MatchForm match={null} players={data.players} handleSubmit={() => {}} />
+</div>

@@ -25,7 +25,7 @@
         id="ffe-id"
         pattern="A-Z\d+"
         disabled={isUpdate}
-        placeholder="Une lettre majuscule suivie de chiffres"
+        placeholder="Une majuscule suivie de chiffres"
         bind:value={data.ffeId}>Code FFE</FormGroup
       >
     </div>

@@ -7,11 +7,13 @@
   <title>Créer un joueur</title>
 </svelte:head>
 
-<PlayerForm
-  player={null}
-  handleSubmit={async (data) => {
-    const createResult = await create("players", data);
-    console.log(createResult);
-  }}
-  isUpdate={false}
-/>
+<div class="container-center">
+  <PlayerForm
+    player={null}
+    handleSubmit={async (data) => {
+      const createResult = await create("players", data);
+      console.log(createResult);
+    }}
+    isUpdate={false}
+  />
+</div>

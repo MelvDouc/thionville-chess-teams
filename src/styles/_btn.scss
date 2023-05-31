@@ -1,6 +1,6 @@
 @use "colors";
 
-.btn {
+@mixin btn {
   all: unset;
   padding: 0.45em 0.66em;
   border-radius: 5px;
@@ -11,6 +11,10 @@
   color: white;
   cursor: pointer;
   transition: scale 200ms ease-out;
+}
+
+.btn {
+  @include btn;
 
   &:active {
     scale: 0.975;

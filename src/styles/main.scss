@@ -9,7 +9,7 @@
   font-family: Montserrat, "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif !important;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  background-color: hsl(0, 0%, 92%);
+  background: url("/img/chess-bg.jpg") center / cover no-repeat;
 
   &::-webkit-scrollbar {
     display: none;
@@ -20,7 +20,9 @@
   min-height: 100vh;
   max-width: 1200px;
   margin: 0 auto;
-  background: white;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background-color: hsl(0, 0%, 100%, 0.95);
 }
 
 main {
@@ -30,4 +32,16 @@ main {
 
 p {
   margin-bottom: 1em;
+}
+
+input {
+  &[type=number] {
+    appearance: textfield;
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }

@@ -3,6 +3,10 @@
   export let data: { players: App.Player[] };
 </script>
 
+<svelte:head>
+  <title>Joueurs</title>
+</svelte:head>
+
 <section class="top">
   <PlusButton link="/joueurs/nouveau">Créer un joueur</PlusButton>
 </section>

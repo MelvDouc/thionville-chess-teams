@@ -1,8 +1,8 @@
+@use "btn";
 @use "colors";
 
 .form {
   width: min(100%, 700px);
-  margin: 0 auto;
   padding: 1em;
   gap: 1em;
   border-radius: 5px;
@@ -14,6 +14,35 @@
   &-row {
     display: flex;
     flex-wrap: wrap;
+
+
+    [class^="form-group"] {
+
+      input,
+      select,
+      textarea {
+        font-size: inherit;
+        font-family: inherit;
+        padding: 0.2em 0.25em;
+      }
+
+      input {
+
+        &[type="text"],
+        &[type="email"],
+        &[type="password"],
+        &[type="number"],
+        &[type="search"],
+        &[type="date"] {
+          width: 100%;
+        }
+      }
+
+      textarea {
+        height: 100%;
+        resize: vertical;
+      }
+    }
   }
 
   @for $i from 1 through 12 {
@@ -34,37 +63,15 @@
     gap: 0.5em;
   }
 
-  input,
-  textarea {
-    font-size: inherit;
-    font-family: inherit;
-    padding: 0.2em 0.25em;
-  }
+  .form-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
 
-  input {
-
-    &[type="text"],
-    &[type="email"],
-    &[type="password"],
-    &[type="number"],
-    &[type="search"],
-    &[type="date"] {
-      width: 100%;
+    button {
+      @include btn.btn;
+      background-color: colors.$secondary;
     }
-
-    &[type=number] {
-      -moz-appearance: textfield;
-    }
-
-    &::-webkit-outer-spin-button,
-    &::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-  }
-
-  textarea {
-    height: 100%;
-    resize: vertical;
   }
 }
