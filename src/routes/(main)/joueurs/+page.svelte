@@ -1,15 +1,10 @@
 <script lang="ts">
-  import PlusButton from "$components/PlusButton.svelte";
   export let data: { players: App.Player[] };
 </script>
 
 <svelte:head>
   <title>Joueurs</title>
 </svelte:head>
-
-<section class="top">
-  <PlusButton link="/joueurs/nouveau">Créer un joueur</PlusButton>
-</section>
 
 <table class="table">
   <thead>
@@ -43,9 +38,3 @@
     {/each}
   </tbody>
 </table>
-
-<style scoped>
-  .top {
-    margin-bottom: 2em;
-  }
-</style>

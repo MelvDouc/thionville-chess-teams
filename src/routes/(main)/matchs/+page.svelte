@@ -1,6 +1,4 @@
 <script lang="ts">
-  import PlusButton from "$components/PlusButton.svelte";
-
   export let data: { seasons: number[] };
 </script>
 
@@ -16,10 +14,6 @@
       </li>
     {/each}
   </ul>
-</section>
-
-<section>
-  <PlusButton link="/matchs/nouveau">Créer un match</PlusButton>
 </section>
 
 <style lang="scss" scoped>
