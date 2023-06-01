@@ -58,77 +58,69 @@
   }
 </script>
 
-<div class="lineup-table">
-  <section class="head">
-    <article class="row">
-      <div>Éch.</div>
-      <div>Prénom NOM</div>
-      <div>Code FFE</div>
-      <div>Elo</div>
-      <div>Cap.</div>
-    </article>
-  </section>
-  <section class="body">
+<table class="table table-warning table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Éch.</th>
+      <th>Prénom NOM</th>
+      <th>Code FFE</th>
+      <th>Elo</th>
+      <th class="text-center">Cap.</th>
+    </tr>
+  </thead>
+  <tbody>
     {#each Object.entries($lineUpStore) as [board, item]}
-      <article class="row">
-        <div>{+board}{(+board % 2 === 1) === whiteOnOdds ? "B" : "N"}</div>
-        <div>
+      <tr>
+        <td>{+board}{(+board % 2 === 1) === whiteOnOdds ? "B" : "N"}</td>
+        <td>
           <input
             type="text"
             value={item?.name ?? ""}
             on:input={getUpdateByNameFn(+board)}
             list="players-datalist"
           />
-        </div>
-        <div>
-          <input type="text" value={item?.ffeId ?? ""} on:input={getUpdateFfeIdFn(+board)} />
-        </div>
-        <div>
-          <input type="number" value={item?.rating || ""} on:input={getUpdateRatingFn(+board)} />
-        </div>
-        <div>
+        </td>
+        <td>
+          <input
+            type="text"
+            class="ffeId-input"
+            value={item?.ffeId ?? ""}
+            on:input={getUpdateFfeIdFn(+board)}
+          />
+        </td>
+        <td>
+          <input
+            type="number"
+            class="rating-input"
+            value={item?.rating || ""}
+            on:input={getUpdateRatingFn(+board)}
+          />
+        </td>
+        <td class="text-center">
           <input
             type="radio"
             name="captain-ffe-id"
             checked={captainFfeId !== null && item?.ffeId === captainFfeId}
             on:change={getCheckedHandler(+board)}
           />
-        </div>
-      </article>
+        </td>
+      </tr>
     {/each}
-  </section>
+  </tbody>
 
   <datalist id="players-datalist">
     {#each [...map.keys()] as name}
       <option value={name}>{name}</option>
     {/each}
   </datalist>
-</div>
+</table>
 
-<style lang="scss" scoped>
-  .lineup-table {
-    background-color: black;
-    padding: 0.66em;
-    gap: 0.66em;
-    display: flex;
-    flex-direction: column;
-
-    section {
-      display: flex;
-      flex-direction: column;
-      gap: 0.33em;
-    }
+<style scoped>
+  .rating-input {
+    width: 4em;
   }
 
-  .row {
-    display: grid;
-    grid-template-columns: 10% 40% 20% 20% 10%;
-    gap: 0.33em;
-
-    > div {
-      input:not([type="radio"]) {
-        width: 100%;
-      }
-    }
+  .ffeId-input {
+    width: 6em;
   }
 </style>

@@ -1,77 +1,29 @@
-@use "btn";
-@use "colors";
-
 .form {
-  width: min(100%, 700px);
-  padding: 1em;
-  gap: 1em;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
+  $bg-clr1: hsl(181, 41%, 25%);
+  $bg-clr2: hsl(181, 72%, 13%);
+  margin: 0 auto;
+  border-radius: 10px;
   color: white;
-  background-color: colors.$primary;
+  background: $bg-clr1;
+  background: linear-gradient(to right, $bg-clr2, $bg-clr1);
 
-  &-row {
-    display: flex;
-    flex-wrap: wrap;
-
-
-    [class^="form-group"] {
-
-      input,
-      select,
-      textarea {
-        font-size: inherit;
-        font-family: inherit;
-        padding: 0.2em 0.25em;
-      }
-
-      input {
-
-        &[type="text"],
-        &[type="email"],
-        &[type="password"],
-        &[type="number"],
-        &[type="search"],
-        &[type="date"] {
-          width: 100%;
-        }
-      }
-
-      textarea {
-        height: 100%;
-        resize: vertical;
-      }
+  .form-required {
+    &::after {
+      content: "*";
+      display: inline-block;
+      margin-inline-start: 0.33em;
+      transform: scale(1.2, 1.5);
+      color: red;
     }
   }
 
-  @for $i from 1 through 12 {
-    .form-group-#{$i} {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5em;
-      padding-inline: 0.5em;
-      width: calc(100% / 12 * $i);
-
+  @media only screen and (max-width: 576px) {
+    [class^="col"] {
+      margin-bottom: 0.5em;
     }
   }
+}
 
-  .form-checkbox {
-    display: flex;
-    align-items: center;
-    padding-inline: 0.5em;
-    gap: 0.5em;
-  }
-
-  .form-submit {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5em;
-
-    button {
-      @include btn.btn;
-      background-color: colors.$secondary;
-    }
-  }
+.formSwitchInput {
+  filter: hue-rotate(225deg);
 }
