@@ -14,6 +14,5 @@
       const createResult = await create("players", data);
       console.log(createResult);
     }}
-    isUpdate={false}
   />
 </div>
