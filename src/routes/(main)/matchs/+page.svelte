@@ -6,23 +6,19 @@
   <title>Matchs par saison</title>
 </svelte:head>
 
-<section class="top">
-  <ul>
-    {#each data.seasons as season}
-      <li>
-        <a href="/matchs/{season}">{season - 1}-{season}</a>
-      </li>
-    {/each}
-  </ul>
-</section>
+<h1>Saisons</h1>
+
+<ul>
+  {#each data.seasons as season}
+    <li>
+      <a href="/matchs/{season}">{season - 1}-{season}</a>
+    </li>
+  {/each}
+</ul>
 
 <style lang="scss" scoped>
-  .top {
-    margin-bottom: 2em;
-
-    ul {
-      list-style-type: disclosure-closed;
-      list-style-position: inside;
-    }
+  ul {
+    list-style-type: disclosure-closed;
+    list-style-position: inside;
   }
 </style>
