@@ -6,7 +6,7 @@
   <title>Joueurs</title>
 </svelte:head>
 
-<table class="table">
+<table class="table table-light table-striped">
   <thead>
     <tr>
       <th>Prénom NOM</th>
@@ -27,8 +27,8 @@
         <td>{email}</td>
         <td>{phone1 ?? ""}</td>
         <td>{rating}</td>
-        <td>
-          <div class="table__actions">
+        <td class="align-middle">
+          <div class="d-flex justify-content-center align-items-center gap-2">
             <a href="/joueurs/{ffeId}/modifier" class="btn btn-primary">
               <i class="bi bi-pen-fill" />
             </a>

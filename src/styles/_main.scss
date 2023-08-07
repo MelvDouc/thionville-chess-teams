@@ -3,15 +3,14 @@
 @import "../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
 :root {
+  --bs-body-font-family: Montserrat, "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
   --page-width: 900px;
-  --header-height: 60px;
 }
 
 #App {
   min-height: 100vh;
   display: grid;
-  grid-template-rows: 1fr minmax(calc(100vh - var(--header-height)), auto) auto;
-  font-family: Montserrat, "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif !important;
+  grid-template-rows: 8vh minmax(92vh, auto) auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
 
@@ -33,19 +32,6 @@ a {
 
 ul {
   list-style-position: inside;
-}
-
-input {
-
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  &[type="number"] {
-    appearance: textfield;
-  }
 }
 
 .cursor-pointer {

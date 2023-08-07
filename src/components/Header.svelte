@@ -4,7 +4,7 @@
 </script>
 
 <header>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="h-100 navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a href="/" class="navbar-brand d-flex align-items-center gap-2">
         <img

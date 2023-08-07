@@ -31,6 +31,7 @@
   main {
     $clr1: rgb(255, 255, 255, 0.85);
     $clr2: rgb(255, 255, 255, 0.9);
+    padding-bottom: 250px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;

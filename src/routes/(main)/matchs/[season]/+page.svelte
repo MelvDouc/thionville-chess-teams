@@ -14,9 +14,9 @@
   <title>Matchs {data.season - 1}-{data.season}</title>
 </svelte:head>
 
-<p>Tous les matchs commencent à <strong>14h15</strong>.</p>
+<p class="mb-5">Tous les matchs commencent à <strong>14h15</strong>.</p>
 
-<table class="table">
+<table class="table table-light table-striped">
   <thead>
     <tr>
       <th>Rd.</th>
@@ -27,9 +27,9 @@
     </tr>
   </thead>
   {#each data.matches as item}
-    <tbody class="table__subtitle-body">
+    <tbody class="subtitleTbody">
       <tr>
-        <td colspan={5}>{item.teamName}</td>
+        <td colspan={5} class="text-center">{item.teamName}</td>
       </tr>
     </tbody>
     <tbody>
@@ -44,14 +44,14 @@
             </address>
           </td>
           <td>{formatDate(m.date)}</td>
-          <td>
-            <div class="table__actions">
+          <td class="align-middle">
+            <div class="d-flex justify-content-center align-items-center gap-2">
               <a href="/matchs/{m.season}/{m.round}/{m.teamName}/modifier" class="btn btn-primary">
                 <i class="bi bi-pen-fill" />
               </a>
               <a
                 href="/matchs/{m.season}/{m.round}/{m.teamName}/composition"
-                class="btn btn-info"
+                class="btn btn-warning"
                 target="_blank"
               >
                 <i class="bi bi-table" />
@@ -63,3 +63,13 @@
     </tbody>
   {/each}
 </table>
+
+<style lang="scss">
+  .subtitleTbody {
+    td {
+      box-shadow: initial;
+      background: #222;
+      color: white;
+    }
+  }
+</style>
