@@ -1,4 +1,5 @@
 <script>
+  // TODO: check this
   import { page } from "$app/stores";
 </script>
 

@@ -1,27 +1,38 @@
+<script lang="ts">
+  import LogInForm from "$components/LogInForm.svelte";
+
+  export let data: Pick<App.Locals, "user">;
+  const title = data.user ? "Accueil" : "Connexion";
+</script>
+
 <svelte:head>
-  <title>Accueil</title>
+  <title>{title}</title>
 </svelte:head>
 
-<h1>Accueil</h1>
+{#if data.user}
+  <h1>{title}</h1>
 
-<div class="overlay px-2 py-3">
-  <p>
-    Bienvenue sur le site de gestion des équipes du club <strong>Thionville Échecs</strong>. Avec
-    les privilèges nécessaires, vous pouvez ici consulter la liste des
-    <a href="/joueurs">joueurs</a>
-    et des <a href="/matchs">matchs</a>, ajouter des éléments à ces listes, les modifier ou les
-    supprimer.
-  </p>
+  <div class="overlay px-2 py-3">
+    <p>
+      Bienvenue sur le site de gestion des équipes du club <strong>Thionville Échecs</strong>. Avec
+      les privilèges nécessaires, vous pouvez ici consulter la liste des
+      <a href="/joueurs">joueurs</a>
+      et des <a href="/matchs">matchs</a>, ajouter des éléments à ces listes, les modifier ou les
+      supprimer.
+    </p>
 
-  <p class="m-0">
-    Ce site a été conçu par moi-même, Melvin DOUCET, joueur ou ancien joueur du club au moment où
-    vous lisez ces lignes. Si je ne me charge plus de l'entretenir, veuillez contacter la personne
-    adéquate auprès du club. Je suis joignable par formulaire de contact sur <a
-      href="https://www.melvin-doucet.com/contact"
-      target="_blank">mon site</a
-    >.
-  </p>
-</div>
+    <p class="m-0">
+      Ce site a été conçu par moi-même, Melvin DOUCET, joueur ou ancien joueur du club au moment où
+      vous lisez ces lignes. Si je ne me charge plus de l'entretenir, veuillez contacter la personne
+      adéquate auprès du club. Je suis joignable par formulaire de contact sur <a
+        href="https://www.melvin-doucet.com/contact"
+        target="_blank">mon site</a
+      >.
+    </p>
+  </div>
+{:else}
+  <LogInForm />
+{/if}
 
 <style lang="scss">
   .overlay {

@@ -5,7 +5,9 @@ import PlayerRoles from "$lib/PlayerRoles.js";
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			user?: User;
+		}
 		// interface PageData {}
 		// interface Platform {}
 
@@ -49,7 +51,10 @@ declare global {
 			lineUp: Record<number, LineUpItem | null>;
 			captainFfeId: Player["ffeId"] | null;
 		}
+
+		type User = Pick<Player, "ffeId" | "role">;
 	}
+
 
 	type InsertResult = {
 		acknowledged: boolean;
