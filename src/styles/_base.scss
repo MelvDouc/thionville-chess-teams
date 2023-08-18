@@ -7,10 +7,7 @@
   --page-width: 900px;
 }
 
-#App {
-  min-height: 100vh;
-  display: grid;
-  grid-template-rows: minmax(8vh, auto) minmax(92vh, auto) auto;
+html {
   -ms-overflow-style: none;
   scrollbar-width: none;
 
@@ -32,32 +29,4 @@ a {
 
 ul {
   list-style-position: inside;
-}
-
-.cursor-pointer {
-  cursor: pointer;
-}
-
-.link-no-hover:hover {
-  color: currentColor;
-}
-
-.list-style-none {
-  list-style: none;
-}
-
-.overflow-x-auto {
-  overflow-x: auto;
-}
-
-.overflow-y-auto {
-  overflow-y: auto;
-}
-
-.w--500 {
-  width: min(100%, 500px);
-}
-
-.white-space-pre-wrap {
-  white-space: pre-wrap;
 }

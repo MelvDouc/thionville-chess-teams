@@ -17,7 +17,7 @@
           height={24}
           class="d-inline-block align-text-top"
         />
-        <h1 class="m-0 white-space-pre-wrap fs-5">{title}</h1>
+        <h1 class="m-0 text-wrap fs-5">{title}</h1>
       </a>
       <button
         class="navbar-toggler"

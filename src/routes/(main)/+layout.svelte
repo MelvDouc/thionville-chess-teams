@@ -16,22 +16,19 @@
   <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </svelte:head>
 
-<div id="root">
-  <div id="App">
-    <Header title={SITE_TITLE} user={data.user} />
-    <main>
-      <div class="container-sm h-100 p-4">
-        <slot />
-      </div>
-    </main>
-    <Footer title={SITE_TITLE} />
+<Header title={SITE_TITLE} user={data.user} />
+<main>
+  <div class="container-sm h-100 p-4">
+    <slot />
   </div>
-</div>
+</main>
+<Footer title={SITE_TITLE} />
 
 <style lang="scss">
   main {
     $clr1: rgb(255, 255, 255, 0.85);
     $clr2: rgb(255, 255, 255, 0.9);
+    min-height: 100vh;
     padding-bottom: 250px;
     background-repeat: no-repeat;
     background-position: center;
