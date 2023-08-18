@@ -1,9 +1,10 @@
 import matchModel from "$lib/server/models/match.model.js";
 
-export const load = async ({ params: { season } }) => {
-  const matches = await matchModel.getMatchesBySeasonGroupedByTeamName(+season);
+export const load = async (loadEvent) => {
+  const season = +loadEvent.params.season;
+  const matches = await matchModel.getMatchesBySeasonGroupedByTeamName(season);
   return {
-    season: +season,
+    season,
     matches
   };
 };

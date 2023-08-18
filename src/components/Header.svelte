@@ -1,5 +1,8 @@
 <script lang="ts">
   import HeaderDropdown from "$components/HeaderDropdown.svelte";
+  import LogOutButton from "$components/LogOutButton.svelte";
+
+  export let user: App.User | null;
   export let title: string;
 </script>
 
@@ -29,27 +32,31 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <HeaderDropdown mainText="Matchs">
-            <li>
-              <a href="/matchs" class="dropdown-item">Matchs</a>
-            </li>
-            <li>
-              <a href="/matchs/nouveau" class="dropdown-item">Ajouter un match</a>
-            </li>
-          </HeaderDropdown>
-          <HeaderDropdown mainText="Joueurs">
-            <li>
-              <a href="/joueurs" class="dropdown-item">Liste</a>
-            </li>
-            <li>
-              <a href="/joueurs/nouveau" class="dropdown-item">Ajouter un joueur</a>
-            </li>
-          </HeaderDropdown>
+          {#if user}
+            <HeaderDropdown mainText="Matchs">
+              <li>
+                <a href="/matchs" class="dropdown-item">Matchs</a>
+              </li>
+              <li>
+                <a href="/matchs/nouveau" class="dropdown-item">Ajouter un match</a>
+              </li>
+            </HeaderDropdown>
+            <HeaderDropdown mainText="Joueurs">
+              <li>
+                <a href="/joueurs" class="dropdown-item">Liste</a>
+              </li>
+              <li>
+                <a href="/joueurs/nouveau" class="dropdown-item">Ajouter un joueur</a>
+              </li>
+            </HeaderDropdown>
+          {/if}
         </ul>
         <span class="navbar-text">
-          <div class="d-flex align-items-center gap-2">
-            <!-- log out button -->
-          </div>
+          {#if user}
+            <LogOutButton {user} />
+          {:else}
+            <a href="/connexion" class="nav-link">Se connecter</a>
+          {/if}
         </span>
       </div>
     </div>

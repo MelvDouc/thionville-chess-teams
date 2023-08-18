@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { afterUpdate } from "svelte";
-  import Header from "$components/Header.svelte";
   import Footer from "$components/Footer.svelte";
+  import Header from "$components/Header.svelte";
   import "$styles/main.scss";
+  import { afterUpdate } from "svelte";
 
+  export let data: { user: App.User | null };
   const SITE_TITLE = "Thionville Échecs — Équipes";
 
   afterUpdate(() => {
@@ -17,7 +18,7 @@
 
 <div id="root">
   <div id="App">
-    <Header title={SITE_TITLE} />
+    <Header title={SITE_TITLE} user={data.user} />
     <main>
       <div class="container-sm h-100 p-4">
         <slot />
