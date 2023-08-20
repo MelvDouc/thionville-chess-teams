@@ -23,3 +23,9 @@ export const actions = {
     };
   }
 };
+
+export function load({ locals: { user } }) {
+  return {
+    userRole: user?.role ?? NaN
+  };
+}

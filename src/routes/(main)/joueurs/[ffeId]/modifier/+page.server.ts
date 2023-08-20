@@ -26,11 +26,14 @@ export const actions = {
   }
 };
 
-export const load = async ({ params: { ffeId } }) => {
+export async function load({ params: { ffeId }, locals: { user } }) {
   const player = await playerModel.getPlayer({ ffeId });
 
   if (!player)
     throw error(404);
 
-  return { player };
-};
+  return {
+    player,
+    userRole: user?.role ?? NaN
+  };
+}
