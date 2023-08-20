@@ -4,22 +4,14 @@ import { redirect } from "@sveltejs/kit";
 export const actions = {
   default: async ({ request, locals: { user } }) => {
     const formData = await request.formData();
-    const { player, errors } = playerModel.getPlayerOrErrors(
-      Object.fromEntries([...formData]) as Record<keyof App.Player, FormDataEntryValue>,
-      user?.role ?? NaN,
-      false
-    );
+    const data = Object.fromEntries([...formData]);
+    const insertResult = await playerModel.createPlayer(data, user?.role ?? NaN);
 
-    if (errors)
-      return { errors };
-
-    const { acknowledged } = await playerModel.createPlayer(player);
-
-    if (acknowledged)
-      throw redirect(302, `/joueurs#${player.ffeId}`);
+    if (insertResult.acknowledged)
+      throw redirect(302, `/joueurs#${data.ffeId}`);
 
     return {
-      errors: ["Le joueur n'a pas pu être ajouté."]
+      errors: (insertResult as { errors: string[]; }).errors
     };
   }
 };

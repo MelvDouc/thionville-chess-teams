@@ -11,6 +11,4 @@ const db = {
   matches: mainDb.collection<App.Match>("matches")
 } as const;
 
-export {
-  db, ObjectId, type Filter
-};
+export { ObjectId, db, type Filter };

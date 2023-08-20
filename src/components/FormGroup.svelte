@@ -16,6 +16,7 @@
   class="form-control"
   {type}
   {id}
+  name={id}
   {placeholder}
   {pattern}
   {value}

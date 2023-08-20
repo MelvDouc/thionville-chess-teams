@@ -3,25 +3,15 @@ import { error, redirect } from "@sveltejs/kit";
 
 export const actions = {
   default: async ({ request, params: { ffeId }, locals: { user } }) => {
-    const data = await request.formData();
-    const { player, errors } = playerModel.getPlayerOrErrors(
-      Object.fromEntries([...data]) as Record<keyof App.Player, FormDataEntryValue>,
-      user?.role ?? NaN,
-      true
-    );
+    const formData = await request.formData();
+    const data = Object.fromEntries([...formData]);
+    const updateResult = await playerModel.updatePlayer(ffeId, data, user?.role ?? NaN);
 
-    console.log(errors);
-
-    if (errors)
-      return { errors };
-
-    const { acknowledged } = await playerModel.updatePlayer(ffeId, player);
-
-    if (acknowledged)
-      throw redirect(302, `/joueurs#${player.ffeId}`);
+    if (updateResult.acknowledged)
+      throw redirect(302, `/joueurs#${ffeId}`);
 
     return {
-      errors: ["Le joueur n'a pas pu être modifié."]
+      errors: (updateResult as { errors: string[]; }).errors
     };
   }
 };

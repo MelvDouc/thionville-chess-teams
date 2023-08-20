@@ -24,7 +24,7 @@
         >
       </article>
       <article class="col-12 col-sm-5">
-        <FormGroup type="number" id="ffeId" value={player?.fideId || ""}>N° FIDE</FormGroup>
+        <FormGroup type="number" id="fideId" value={player?.fideId || ""}>N° FIDE</FormGroup>
       </article>
       <article class="col-12 col-sm-4">
         <FormGroup id="membership" value={player?.membership || ""}>Type d'adhérent</FormGroup>

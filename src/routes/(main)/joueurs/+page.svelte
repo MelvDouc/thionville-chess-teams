@@ -27,7 +27,7 @@
           <td>{fideId || ""}</td>
           <td>{email}</td>
           <td>{phone1 ?? ""}</td>
-          <td>{rating}</td>
+          <td>{rating || ""}</td>
           <td class="align-middle">
             <div class="d-flex justify-content-center align-items-center gap-2">
               <a href="/joueurs/{ffeId}/modifier" class="btn btn-primary">
