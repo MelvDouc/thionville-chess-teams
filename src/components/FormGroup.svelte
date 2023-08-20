@@ -5,11 +5,21 @@
   export let checked: boolean | null | undefined = null;
   export let placeholder: string | undefined = undefined;
   export let pattern: string | undefined = undefined;
-  export let required = true;
+  export let required = false;
   export let disabled = false;
 </script>
 
-<label for={id} class:form-required={required}>
+<label for={id} class="form-label" class:form-required={required}>
   <slot />
 </label>
-<input {type} {id} {placeholder} {pattern} {value} {checked} {disabled} {required} />
+<input
+  class="form-control"
+  {type}
+  {id}
+  {placeholder}
+  {pattern}
+  {value}
+  {checked}
+  {disabled}
+  {required}
+/>

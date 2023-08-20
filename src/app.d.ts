@@ -1,4 +1,4 @@
-import PlayerRoles from "$lib/PlayerRoles.js";
+import PR from "$lib/PlayerRole.js";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -14,7 +14,7 @@ declare global {
 		type BoardColor = "B" | "N";
 		type PlayerCredentials = Pick<Player, "ffeId" | "pwd">;
 		type PlayerData = Pick<Player, "ffeId" | "role">;
-		type PlayerRole = typeof PlayerRoles[keyof typeof PlayerRoles];
+		type PlayerRole = PR;
 		type LineUpItem = Pick<Player, "ffeId" | "rating"> & {
 			name: string;
 		};

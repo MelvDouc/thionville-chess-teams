@@ -1,6 +1,7 @@
 <script lang="ts">
   import PlayerForm from "$components/PlayerForm.svelte";
-  import { create } from "$lib/api.js";
+
+  export let form: { errors?: string[] } | null;
 </script>
 
 <svelte:head>
@@ -8,11 +9,5 @@
 </svelte:head>
 
 <div class="container-center">
-  <PlayerForm
-    player={null}
-    handleSubmit={async (data) => {
-      const createResult = await create("players", data);
-      console.log(createResult);
-    }}
-  />
+  <PlayerForm player={null} action="/joueurs/nouveau" errors={form?.errors ?? null} />
 </div>

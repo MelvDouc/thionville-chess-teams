@@ -10,6 +10,6 @@ export function formatDate(date: Date) {
   return dateFormatter.format(date);
 }
 
-export function getDatePortion(date: Date) {
-  return date.toISOString().slice(0, 10);
+export function getDatePortion(date: Date): string {
+  return date.toISOString().split("T")[0];
 }
