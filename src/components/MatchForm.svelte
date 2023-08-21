@@ -1,7 +1,7 @@
 <script lang="ts">
-  import lineUpStore, { getEmptyLineUp } from "$lib/stores/lineup-store.js";
-  import { getDatePortion } from "$lib/date-formatter.js";
   import LineUpTable from "$components/LineUpTable.svelte";
+  import { getDatePortion } from "$lib/date-formatter.js";
+  import lineUpStore, { getEmptyLineUp } from "$lib/stores/lineup-store.js";
 
   export let match: (App.Match & { _id: string }) | null;
   export let players: Omit<App.Player, "pwd" | "pwdResetId">[];
@@ -18,7 +18,7 @@
     whiteOnOdds = !!match?.whiteOnOdds,
     captainFfeId = match?.captainFfeId ?? null;
 
-  lineUpStore.set(match?.lineUp ?? getEmptyLineUp());
+  lineUpStore.set(match?.lineup ?? getEmptyLineUp());
 
   function updateDate({ target }: Event) {
     const newDate = (target as HTMLInputElement).valueAsDate;
@@ -40,7 +40,7 @@
       city: city.trim(),
       zipCode: zipCode.trim(),
       whiteOnOdds,
-      lineUp: $lineUpStore,
+      lineup: $lineUpStore,
       captainFfeId,
     })}
 >

@@ -1,26 +1,17 @@
 <script lang="ts">
+  import ScoresheetLineupTable from "$components/ScoresheetLineupTable.svelte";
+
   export let data: {
     date: string;
     city: string;
     round: number;
     season: string;
     referee: string;
-    odd: Team;
-    even: Team;
+    odd: Scoresheet.Team;
+    even: Scoresheet.Team;
   };
 
   const { date, city, round, season, even, odd, referee } = data;
-
-  type Team = {
-    lineUp: {
-      board: string;
-      name: string;
-      ffeId: string;
-      rating: string;
-    }[];
-    cap: string;
-    club: string;
-  };
 </script>
 
 <svelte:head>
@@ -43,95 +34,21 @@
     </thead>
     <tbody>
       <tr>
-        <td>{date}</td>
-        <td>{city}</td>
-        <td>Interclubs Adultes</td>
-        <td>{round}</td>
+        <td contenteditable="true">{date}</td>
+        <td contenteditable="true">{city}</td>
+        <td contenteditable="true">Interclubs Adultes</td>
+        <td contenteditable="true">{round}</td>
       </tr>
     </tbody>
   </table>
 
-  <div class="line-up-tables">
+  <div class="lineup-tables">
     <section>
-      <table class="line-up-top-table">
-        <thead>
-          <tr>
-            <th>Club ayant les blancs sur les échiquiers impairs</th>
-            <th>S</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{odd.club}</td>
-            <td />
-          </tr>
-        </tbody>
-      </table>
-      <table class="line-up-bottom-table">
-        <thead>
-          <tr>
-            <th />
-            <th>Nom et Prénom</th>
-            <th class="player-ffe-id">Code FFE</th>
-            <th class="player-rating">Elo</th>
-            <th>C*</th>
-            <th>R</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each odd.lineUp as item}
-            <tr>
-              <td contenteditable>{item.board}</td>
-              <td contenteditable>{item.name}</td>
-              <td contenteditable>{item.ffeId}</td>
-              <td contenteditable>{item.rating}</td>
-              <td />
-              <td />
-            </tr>
-          {/each}
-        </tbody>
-      </table>
+      <ScoresheetLineupTable parity="impairs" team={odd} />
     </section>
 
     <section>
-      <table class="line-up-top-table">
-        <thead>
-          <tr>
-            <th>Club ayant les blancs sur les échiquiers pairs</th>
-            <th>S</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{even.club}</td>
-            <td />
-          </tr>
-        </tbody>
-      </table>
-      <table class="line-up-bottom-table">
-        <thead>
-          <tr>
-            <th />
-            <th>Nom et Prénom</th>
-            <th class="player-ffe-id">Code FFE</th>
-            <th class="player-rating">Elo</th>
-            <th>C*</th>
-            <th>R</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each even.lineUp as item}
-            <tr>
-              <td contenteditable>{item.board}</td>
-              <td contenteditable>{item.name}</td>
-              <td contenteditable>{item.ffeId}</td>
-              <td contenteditable>{item.rating}</td>
-              <td />
-              <td />
-            </tr>
-          {/each}
-        </tbody>
-      </table>
+      <ScoresheetLineupTable parity="pairs" team={even} />
     </section>
   </div>
 
@@ -164,7 +81,7 @@
     h1 {
       text-transform: uppercase;
       text-align: center;
-      font-size: 1.75rem;
+      font-size: 1.685rem;
       letter-spacing: 0.33em;
     }
   }
@@ -184,7 +101,6 @@
         display: block;
       }
 
-      tr + tr,
       tbody tr:first-child {
         border-top: var(--table-border);
       }
@@ -217,42 +133,10 @@
       }
     }
 
-    .line-up-tables {
+    .lineup-tables {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.25em;
-
-      .line-up-top-table {
-        tr {
-          display: grid;
-          grid-template-columns: 11fr 1fr;
-
-          td {
-            text-align: center;
-            text-transform: uppercase;
-          }
-        }
-      }
-
-      .line-up-bottom-table {
-        border-top: 0;
-
-        tbody {
-          td:first-child {
-            font-weight: bold;
-            text-align: center;
-          }
-        }
-
-        th {
-          text-transform: unset;
-        }
-
-        tr {
-          display: grid;
-          grid-template-columns: 1fr 5fr 2fr 2fr 1fr 1fr;
-        }
-      }
     }
 
     .mentions {
@@ -264,11 +148,12 @@
 
       p {
         text-align: center;
+        margin: 0;
       }
 
       .signatures {
         font-size: 0.95em;
-        height: 4rem;
+        height: 3.5rem;
         opacity: 0.33;
         align-items: center;
       }

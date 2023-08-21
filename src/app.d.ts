@@ -48,7 +48,7 @@ declare global {
 			city: string;
 			zipCode: string;
 			date: Date;
-			lineUp: Record<number, LineUpItem | null>;
+			lineup: Record<number, LineUpItem | null>;
 			captainFfeId: Player["ffeId"] | null;
 		}
 
@@ -57,15 +57,18 @@ declare global {
 		type PublicPlayer = Omit<Player, "pwd" | "pwdResetId">;
 	}
 
-	type InsertResult = {
-		acknowledged: boolean;
-		insertedId: string;
-	};
-
-	type UpdateResult = {
-		acknowledged: boolean;
-		modifiedCount: number;
-	};
+	namespace Scoresheet {
+		type Team = {
+			lineup: {
+				board: string;
+				name: string;
+				ffeId: string;
+				rating: string;
+			}[];
+			cap: string;
+			club: string;
+		};
+	}
 
 	type KeysOfType<O, T> = Exclude<{ [K in keyof O]: O[K] extends T ? K : never; }[keyof O], undefined>;
 }
