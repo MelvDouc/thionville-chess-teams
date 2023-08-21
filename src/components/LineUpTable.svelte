@@ -4,56 +4,42 @@
   export let players: App.Player[];
   export let whiteOnOdds: App.Match["whiteOnOdds"];
   export let captainFfeId: App.Match["captainFfeId"];
-  export let lineUpStore: Writable<App.Match["lineUp"]>;
+  export let lineUpStore: Writable<App.Match["lineup"]>;
 
-  const map = players.reduce((acc, { firstName, lastName, ffeId, rating }) => {
-    const name = `${firstName} ${lastName}`;
-    return acc.set(name, { name, ffeId, rating });
-  }, new Map<string, App.LineUpItem>());
+  const playersByName = players.reduce((acc, player) => {
+    return acc.set(`${player.firstName} ${player.lastName}`, player);
+  }, new Map<string, App.Player>());
 
-  function getCheckedHandler(board: number) {
+  function updateLineupItem(board: number) {
     return ({ target }: Event) => {
-      if ($lineUpStore[board] && (target as HTMLInputElement).checked)
-        captainFfeId = $lineUpStore[board]!.ffeId;
-    };
-  }
+      if (!(target instanceof HTMLInputElement)) return;
 
-  function getUpdateByNameFn(board: number) {
-    return ({ target }: Event) => {
-      const name = (target as HTMLInputElement).value;
-      lineUpStore.update((prev) => ({
-        ...prev,
-        [board]: !name
-          ? null
-          : map.get(name) ?? {
-              name,
-              ffeId: "",
-              rating: 0,
-            },
-      }));
-    };
-  }
-
-  function getUpdateFfeIdFn(board: number) {
-    return ({ target }: Event) => {
-      const ffeId = (target as HTMLInputElement).value;
-      lineUpStore.update((prev) => ({
-        ...prev,
-        [board]: prev[board] ? { ...prev[board]!, ffeId } : { name: "", ffeId, rating: 0 },
-      }));
-    };
-  }
-
-  function getUpdateRatingFn(board: number) {
-    return ({ target }: Event) => {
-      const rating = (target as HTMLInputElement).valueAsNumber;
-      lineUpStore.update((prev) => {
-        if (!prev[board]) return prev;
-        return {
+      if (!target.value) {
+        lineUpStore.update((prev) => ({
           ...prev,
-          [board]: { ...prev[board]!, rating },
-        };
-      });
+          [board]: null,
+        }));
+        return;
+      }
+
+      const player = playersByName.get(target.value);
+      const item: App.LineUpItem = {
+        name: target.value,
+        ffeId: player?.ffeId ?? $lineUpStore[board]?.ffeId ?? "",
+      };
+      if (player?.rating != null) item.rating = player.rating;
+      else if ($lineUpStore[board]?.rating != null) item.rating = $lineUpStore[board]!.rating;
+      lineUpStore.update((prev) => ({
+        ...prev,
+        [board]: item,
+      }));
+    };
+  }
+
+  function updateCaptainFfeId(board: number) {
+    return ({ target }: Event) => {
+      const item = $lineUpStore[board];
+      if (item && (target as HTMLInputElement).checked) captainFfeId = item.ffeId;
     };
   }
 </script>
@@ -77,7 +63,7 @@
             <input
               type="text"
               value={item?.name ?? ""}
-              on:input={getUpdateByNameFn(+board)}
+              on:input={updateLineupItem(+board)}
               list="players-datalist"
             />
           </td>
@@ -86,7 +72,9 @@
               type="text"
               class="ffeId-input"
               value={item?.ffeId ?? ""}
-              on:input={getUpdateFfeIdFn(+board)}
+              on:input={({ target }) => {
+                if (item && target instanceof HTMLInputElement) item.ffeId = target.value;
+              }}
             />
           </td>
           <td>
@@ -94,7 +82,10 @@
               type="number"
               class="rating-input"
               value={item?.rating || ""}
-              on:input={getUpdateRatingFn(+board)}
+              on:input={({ target }) => {
+                if (item && target instanceof HTMLInputElement && target.valueAsNumber)
+                  item.rating = target.valueAsNumber;
+              }}
             />
           </td>
           <td class="text-center">
@@ -102,19 +93,19 @@
               type="radio"
               name="captain-ffe-id"
               checked={captainFfeId !== null && item?.ffeId === captainFfeId}
-              on:change={getCheckedHandler(+board)}
+              on:change={updateCaptainFfeId(+board)}
             />
           </td>
         </tr>
       {/each}
     </tbody>
-
-    <datalist id="players-datalist">
-      {#each [...map.keys()] as name}
-        <option value={name}>{name}</option>
-      {/each}
-    </datalist>
   </table>
+
+  <datalist id="players-datalist">
+    {#each [...playersByName.keys()] as name}
+      <option value={name}>{name}</option>
+    {/each}
+  </datalist>
 </div>
 
 <style scoped>

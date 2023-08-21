@@ -1,6 +1,6 @@
 <script lang="ts">
-  import FormCheckbox from "$components/FormCheckbox.svelte";
   import FormGroup from "$components/FormGroup.svelte";
+  import FormCheckbox from "$components/FormRadio.svelte";
   import PlayerRole, { roleTranslations } from "$lib/PlayerRole.js";
   import { getDatePortion } from "$lib/date-formatter.js";
 

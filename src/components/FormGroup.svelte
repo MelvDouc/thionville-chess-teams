@@ -5,8 +5,10 @@
   export let checked: boolean | null | undefined = null;
   export let placeholder: string | undefined = undefined;
   export let pattern: string | undefined = undefined;
+  export let min: number | undefined = undefined;
   export let required = false;
   export let disabled = false;
+  export let handleInput: ((e: Event) => void) | undefined = undefined;
 </script>
 
 <label for={id} class="form-label" class:form-required={required}>
@@ -20,7 +22,9 @@
   {placeholder}
   {pattern}
   {value}
+  {min}
   {checked}
   {disabled}
   {required}
+  on:input={handleInput}
 />

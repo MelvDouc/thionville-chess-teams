@@ -11,6 +11,10 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 
+		type ApiResponse<T> =
+			| { success: true; } & T
+			| { success: false; errors: string[]; };
+
 		type BoardColor = "B" | "N";
 		type PlayerCredentials = Pick<Player, "ffeId" | "pwd">;
 		type PlayerData = Pick<Player, "ffeId" | "role">;
@@ -69,6 +73,8 @@ declare global {
 			club: string;
 		};
 	}
+
+	type WithId<T> = T & { _id: string; };
 
 	type KeysOfType<O, T> = Exclude<{ [K in keyof O]: O[K] extends T ? K : never; }[keyof O], undefined>;
 }

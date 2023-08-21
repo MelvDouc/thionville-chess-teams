@@ -1,7 +1,8 @@
 <script lang="ts">
   import MatchForm from "$components/MatchForm.svelte";
 
-  export let data: { players: Omit<App.Player, "pwd" | "pwdResetId">[] };
+  export let data: { players: App.PublicPlayer[] };
+  let errors: string[] | null = null;
 </script>
 
 <svelte:head>
@@ -9,5 +10,33 @@
 </svelte:head>
 
 <div class="container-center">
-  <MatchForm match={null} players={data.players} handleSubmit={() => {}} />
+  <MatchForm
+    match={null}
+    players={data.players}
+    handleSubmit={async (data) => {
+      const response = await fetch("/matchs/nouveau", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const insertResult = await response.json();
+
+      if (insertResult.errors) {
+        errors = insertResult.errors;
+        return;
+      }
+
+      location.assign(`/matchs/${data.season}`);
+    }}
+  />
 </div>
+
+{#if errors}
+  <ul>
+    {#each errors as e}
+      <li>{e}</li>
+    {/each}
+  </ul>
+{/if}

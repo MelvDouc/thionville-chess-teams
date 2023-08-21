@@ -3,10 +3,7 @@
 
   export let data: {
     season: number;
-    matches: {
-      teamName: string;
-      matches: App.Match[];
-    }[];
+    matches: Record<string, WithId<App.Match>[]>;
   };
 </script>
 
@@ -27,34 +24,31 @@
         <th>Actions</th>
       </tr>
     </thead>
-    {#each data.matches as item}
+    {#each Object.entries(data.matches) as [teamName, matches]}
       <tbody class="subtitleTbody">
         <tr>
-          <td colspan={5} class="text-center">{item.teamName}</td>
+          <td colspan={5} class="text-center">{teamName}</td>
         </tr>
       </tbody>
       <tbody>
-        {#each item.matches as m}
+        {#each matches as { season, round, opponent, address, zipCode, city, date, _id }}
           <tr>
-            <td>{m.round}</td>
-            <td>{m.opponent}</td>
+            <td>{round}</td>
+            <td>{opponent}</td>
             <td>
-              <address>
-                <div>{m.address}</div>
-                <div>{m.zipCode} {m.city}</div>
+              <address class="m-0">
+                <div>{address}</div>
+                <div>{zipCode} {city}</div>
               </address>
             </td>
-            <td>{formatDate(m.date)}</td>
+            <td>{formatDate(date)}</td>
             <td class="align-middle">
               <div class="d-flex justify-content-center align-items-center gap-2">
-                <a
-                  href="/matchs/{m.season}/{m.round}/{m.teamName}/modifier"
-                  class="btn btn-primary"
-                >
+                <a href="/matchs/modifier?_id={_id}" class="btn btn-primary">
                   <i class="bi bi-pen-fill" />
                 </a>
                 <a
-                  href="/matchs/{m.season}/{m.round}/{m.teamName}/composition"
+                  href="/matchs/{season}/{round}/{teamName}/composition"
                   class="btn btn-warning"
                   target="_blank"
                 >
