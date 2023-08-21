@@ -1,6 +1,6 @@
-import playerModel from "$lib/server/models/player.model.js";
+import { getPlayers } from "$lib/server/models/player.model.js";
 
-export const load = async () => {
-  const players = playerModel.getPlayers();
+export async function load() {
+  const players = getPlayers();
   return { players };
-};
+}

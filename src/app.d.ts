@@ -53,8 +53,9 @@ declare global {
 		}
 
 		type User = Pick<Player, "ffeId" | "role">;
+		type IndexedPlayer = App.Player & { index: number; };
+		type PublicPlayer = Omit<Player, "pwd" | "pwdResetId">;
 	}
-
 
 	type InsertResult = {
 		acknowledged: boolean;
@@ -65,6 +66,8 @@ declare global {
 		acknowledged: boolean;
 		modifiedCount: number;
 	};
+
+	type KeysOfType<O, T> = Exclude<{ [K in keyof O]: O[K] extends T ? K : never; }[keyof O], undefined>;
 }
 
 export { };

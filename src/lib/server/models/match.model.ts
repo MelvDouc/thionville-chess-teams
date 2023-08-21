@@ -1,4 +1,4 @@
-import { db, ObjectId, type Filter } from "$lib/server/database.js";
+import { ObjectId, db, type Filter } from "$lib/server/database.js";
 
 const pipeLine = [
   {
@@ -40,7 +40,7 @@ const pipeLine = [
   }
 ];
 
-const getMatch = async (filter: Filter<App.Match>) => {
+export async function getMatch(filter: Filter<App.Match>) {
   const match = await db.matches.findOne(filter);
 
   if (match) {
@@ -52,16 +52,9 @@ const getMatch = async (filter: Filter<App.Match>) => {
   }
 
   return null;
-};
+}
 
-const getMatches = (filter: Pick<App.Match, "season" | "round" | "teamName">) => {
-  return db.matches
-    .find(filter)
-    .map(({ _id, ...others }) => ({ _id: _id.toHexString(), ...others }))
-    .toArray();
-};
-
-const getMatchesBySeasonGroupedByTeamName = (season: number) => {
+export function getMatchesBySeasonGroupedByTeamName(season: number) {
   return db.matches
     .aggregate([
       {
@@ -70,25 +63,16 @@ const getMatchesBySeasonGroupedByTeamName = (season: number) => {
       ...pipeLine
     ])
     .toArray();
-};
+}
 
-const getSeasons = async () => {
+export async function getSeasons() {
   return (await db.matches.distinct("season")).sort((a, b) => a - b);
-};
+}
 
-const createMatch = (data: App.Match) => {
+export function createMatch(data: App.Match) {
   return db.matches.insertOne(data);
-};
+}
 
-const updateMatch = (id: string, data: App.Match) => {
+export function updateMatch(id: string, data: App.Match) {
   return db.matches.replaceOne({ _id: new ObjectId(id) }, data);
-};
-
-export default {
-  getMatch,
-  getMatches,
-  getMatchesBySeasonGroupedByTeamName,
-  getSeasons,
-  createMatch,
-  updateMatch
-};
+}

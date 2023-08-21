@@ -1,20 +1,21 @@
-import matchModel from "$lib/server/models/match.model.js";
-import playerModel from "$lib/server/models/player.model.js";
+import PlayerRole from "$lib/PlayerRole.js";
+import { getMatch } from "$lib/server/models/match.model.js";
+import { getPlayers } from "$lib/server/models/player.model.js";
 import { error } from "@sveltejs/kit";
 
-export const load = async ({ params: { season, round, teamName } }) => {
-  const match = await matchModel.getMatch({
+export async function load({ params: { season, round, teamName }, locals: { user } }) {
+  const match = await getMatch({
     season: +season,
     round: +round,
     teamName
   });
 
-  if (!match)
+  if (!match || !user || user.role > PlayerRole.CAPTAIN)
     throw error(404);
 
-  const players = await playerModel.getPlayers();
+  const players = await getPlayers();
   return {
     match,
     players
   };
-};
+}

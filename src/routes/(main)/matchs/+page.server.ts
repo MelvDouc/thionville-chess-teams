@@ -1,6 +1,6 @@
-import matchModel from "$lib/server/models/match.model.js";
+import { getSeasons } from "$lib/server/models/match.model.js";
 
-export const load = async () => {
-  const seasons = await matchModel.getSeasons();
+export async function load() {
+  const seasons = await getSeasons();
   return { seasons };
-};
+}

@@ -22,64 +22,66 @@ const CreateSchema = C.object({
 function CreateValidationSchema(minRole: PlayerRole) {
   return V.object({
     ffeId: V.string().regex(/^[A-Z]\d+$/, "Code FFE invalide."),
-    fideId: V.number().integer().min(1, "N° FIDE invalide."),
     firstName: V.string().minLength(1, "Prénom requis."),
     lastName: V.string().minLength(1, "Nom de famille requis."),
     email: V.string().email("Email invalide."),
     role: V.number().min(minRole, "Rôle non autorisé.").max(PlayerRole.USER, "Rôle non autorisé."),
-    birthDate: V.date().valid("Date de naissance invalide.").optional(),
     rating: V.number().integer().min(0, "Elo invalide.").max(9999, "Elo invalide.").optional()
   });
 }
 
-const getPlayer = async (filter: Filter<App.Player>) => {
+export async function getPlayer(filter: Filter<App.Player>): Promise<App.Player | null> {
   const player = await db.players.findOne(filter);
   if (!player)
     return null;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { _id, birthDate, ...others } = player;
-  return {
-    ...others,
-    birthDate: birthDate ? new Date(birthDate) : null
-  };
-};
+  const { _id, ...others } = player;
+  return others;
+}
 
-const getPlayers = () => {
+export function getPlayers(): Promise<App.PublicPlayer[]> {
   return db.players
     .find()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .map(({ _id, birthDate, pwd, pwdResetId, ...others }) => ({
-      birthDate: birthDate ? new Date(birthDate) : null,
-      ...others
-    }))
+    .map(({ _id, pwd, pwdResetId, ...others }) => others)
     .toArray();
-};
+}
 
-const createPlayer = (data: object, userRole: PlayerRole) => {
-  const player = CreateSchema.cast(data);
-  const errors = CreateValidationSchema(userRole).getErrors(player);
+export function createPlayer(data: object, userRole: PlayerRole) {
+  try {
+    const player = CreateSchema.cast(data);
+    const errors = CreateValidationSchema(userRole).getErrors(player);
 
-  if (errors.length)
-    return { acknowledged: false, errors };
+    if (errors.length)
+      return { acknowledged: false, errors };
 
-  return db.players.insertOne(player);
-};
+    return db.players.insertOne(player);
+  } catch (error) {
+    console.log(error);
+    return { success: false, errors: ["Une erreur s'est produite."] };
+  }
+}
 
-const updatePlayer = (ffeId: string, data: object, userRole: PlayerRole) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const update = CreateSchema.cast(data);
-  console.log(update);
-  const errors = CreateValidationSchema(userRole).getErrors(update);
+export function updatePlayer(ffeId: string, data: object, userRole: PlayerRole) {
+  try {
+    const update = CreateSchema.cast(data);
+    const errors = CreateValidationSchema(userRole).getErrors(update);
 
-  if (errors.length)
-    return { acknowledged: false, errors };
+    if (errors.length)
+      return { acknowledged: false, errors };
 
-  return db.players.replaceOne({ ffeId }, { ...update, ffeId });
-};
+    return db.players.replaceOne({ ffeId }, { ...update, ffeId });
+  } catch (error) {
+    console.log(error);
+    return { success: false, errors: ["Une erreur s'est produite."] };
+  }
+}
 
-export default {
-  getPlayer,
-  getPlayers,
-  createPlayer,
-  updatePlayer
-};
+export async function deletePlayer(ffeId: App.Player["ffeId"], user: App.User) {
+  const player = await getPlayer({ ffeId });
+
+  if (player && user.role < player.role)
+    return db.players.deleteOne({ ffeId });
+
+  return null;
+}
