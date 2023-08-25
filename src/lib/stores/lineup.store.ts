@@ -13,4 +13,4 @@ const getEmptyLineUp = () => {
 export { getEmptyLineUp };
 export default lineUpStore;
 
-type MatchLineUp = App.Match["lineUp"];
+type MatchLineUp = App.Match["lineup"];

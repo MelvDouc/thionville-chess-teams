@@ -27,18 +27,24 @@ const CreateSchema = C.object({
 });
 
 const ValidationSchema = V.object({
-  season: V.number(),
-  round: V.number(),
+  season: V
+    .number()
+    .integer("La saison doit être un nombre entier.")
+    .min(1000, "Saison invalide.")
+    .max(9999, "Saison invalide."),
+  round: V
+    .number()
+    .integer("La ronde doit être un nombre entier.")
+    .min(1, "Ronde invalide."),
   teamName: V.string().minLength(1, "Équipe requise."),
   opponent: V.string().minLength(1, "Adversaire requis."),
   address: V.string().minLength(1, "Adresse requise."),
   city: V.string().minLength(1, "Ville requise."),
   zipCode: V.string().minLength(1, "Code postal requis."),
-  captainFfeId: V.string().minLength(1, "Code FFE du capitaine requis.").optional(),
   date: V.date().valid("Date invalide.")
 });
 
-export async function getMatch(filter: Filter<App.Match>) {
+export async function getMatch(filter: Filter<App.Match>): Promise<WithId<App.Match> | null> {
   const match = await db.matches.findOne(filter);
 
   if (match) {
@@ -52,8 +58,8 @@ export async function getMatch(filter: Filter<App.Match>) {
   return null;
 }
 
-export async function getMatchesBySeasonGroupedByTeamName(season: number) {
-  const matches = await db.matches.find({ season }).toArray();
+export async function getMatchesBySeasonGroupedByTeamName(season: number): Promise<Record<string, WithId<App.Match>[]>> {
+  const matches = await db.matches.find({ season }).sort({ round: 1 }).toArray();
   return matches.reduce((acc, { _id, teamName, ...others }) => {
     acc[teamName] ??= [];
     acc[teamName].push({
@@ -65,26 +71,26 @@ export async function getMatchesBySeasonGroupedByTeamName(season: number) {
   }, {} as Record<string, WithId<App.Match>[]>);
 }
 
-export async function getSeasons() {
+export async function getSeasons(): Promise<number[]> {
   return (await db.matches.distinct("season")).sort((a, b) => a - b);
 }
 
-export async function createMatch(data: App.Match) {
+export async function createMatch(data: App.Match): Promise<App.ApiResponse<{ insertedId: ObjectId; }>> {
   const match = CreateSchema.cast(data);
   const errors = ValidationSchema.getErrors(match);
 
-  if (errors)
+  if (errors.length)
     return { success: false, errors };
 
   const { acknowledged, insertedId } = await db.matches.insertOne(match);
   return { success: acknowledged, insertedId };
 }
 
-export async function updateMatch(_id: string, data: App.Match) {
+export async function updateMatch(_id: string, data: App.Match): Promise<App.ApiResponse> {
   const update = CreateSchema.cast(data);
   const errors = ValidationSchema.getErrors(update);
 
-  if (errors)
+  if (errors.length)
     return { success: false, errors };
 
   const { acknowledged } = await db.matches.updateOne({ _id: new ObjectId(_id) }, {

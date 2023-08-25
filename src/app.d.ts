@@ -11,9 +11,10 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 
-		type ApiResponse<T> =
-			| { success: true; } & T
-			| { success: false; errors: string[]; };
+		type ApiResponse<T = object> = {
+			success: boolean;
+			errors?: string[];
+		} & Partial<T>;
 
 		type BoardColor = "B" | "N";
 		type PlayerCredentials = Pick<Player, "ffeId" | "pwd">;

@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
 
-const store = writable<App.IndexedPlayer[]>();
+const store = writable<(App.IndexedPlayer & { visible: boolean; })[]>();
 
 export default store;

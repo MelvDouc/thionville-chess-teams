@@ -9,6 +9,10 @@
   export let required = false;
   export let disabled = false;
   export let handleInput: ((e: Event) => void) | undefined = undefined;
+
+  function typeAction(element: HTMLInputElement) {
+    element.type = type;
+  }
 </script>
 
 <label for={id} class="form-label" class:form-required={required}>
@@ -16,15 +20,15 @@
 </label>
 <input
   class="form-control"
-  {type}
   {id}
   name={id}
   {placeholder}
   {pattern}
-  {value}
   {min}
   {checked}
   {disabled}
   {required}
+  use:typeAction
+  bind:value
   on:input={handleInput}
 />

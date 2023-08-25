@@ -9,6 +9,7 @@ export async function PUT({ request, url }) {
     throw error(404);
 
   const updateResult = await updateMatch(_id, data);
+
   return new Response(
     JSON.stringify(updateResult)
   );

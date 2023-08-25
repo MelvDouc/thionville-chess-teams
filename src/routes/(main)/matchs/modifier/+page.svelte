@@ -12,6 +12,7 @@
 <MatchForm
   match={data.match}
   players={data.players}
+  {errors}
   handleSubmit={async (match) => {
     const response = await fetch(`/matchs/modifier?_id=${match._id}`, {
       method: "PUT",
@@ -23,6 +24,7 @@
     const updateResult = await response.json();
 
     if (!updateResult.success) {
+      console.log({ errors });
       errors = updateResult.errors;
       return;
     }
@@ -30,11 +32,3 @@
     location.assign(`/matchs/${match.season}`);
   }}
 />
-
-{#if errors}
-  <ul>
-    {#each errors as e}
-      <li>{e}</li>
-    {/each}
-  </ul>
-{/if}

@@ -13,6 +13,7 @@
   <MatchForm
     match={null}
     players={data.players}
+    {errors}
     handleSubmit={async (data) => {
       const response = await fetch("/matchs/nouveau", {
         method: "POST",
@@ -32,11 +33,3 @@
     }}
   />
 </div>
-
-{#if errors}
-  <ul>
-    {#each errors as e}
-      <li>{e}</li>
-    {/each}
-  </ul>
-{/if}

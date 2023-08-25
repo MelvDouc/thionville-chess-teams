@@ -12,7 +12,7 @@ export const actions = {
 
     if (!user || !user.pwd || !(await compare(pwd, user.pwd)))
       return {
-        message: "Identifiants invalides."
+        errors: ["Identifiants invalides."]
       };
 
     logIn(cookies, {
