@@ -82,7 +82,7 @@ export async function createMatch(data: App.Match): Promise<App.ApiResponse<{ in
   if (errors.length)
     return { success: false, errors };
 
-  const { acknowledged, insertedId } = await db.matches.insertOne(match);
+  const { acknowledged, insertedId } = await db.matches.insertOne({ ...match, availableFfeIds: [] });
   return { success: acknowledged, insertedId };
 }
 

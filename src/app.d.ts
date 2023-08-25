@@ -55,6 +55,7 @@ declare global {
 			date: Date;
 			lineup: Record<number, LineUpItem | null>;
 			captainFfeId: Player["ffeId"] | null;
+			availableFfeIds: string[];
 		}
 
 		type User = Pick<Player, "ffeId" | "role">;

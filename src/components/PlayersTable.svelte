@@ -1,6 +1,7 @@
 <script lang="ts">
   import PlayerTableHeading from "$components/PlayerTableHeading.svelte";
   import playerTableStore from "$lib/stores/player-table.store.js";
+  import PlayerButtons from "./PlayerButtons.svelte";
 
   export let players: App.PublicPlayer[];
   export let user: App.User;
@@ -24,17 +25,6 @@
         };
       });
     });
-  }
-
-  async function deletePlayer(ffeId: string) {
-    if (!confirm("Êtes-vous sûr(e) de vouloir supprimer ce joueur ?")) return;
-    const response = await fetch(`/joueurs/${ffeId}/supprimer`, {
-      method: "DELETE",
-    });
-    const data = await response.json();
-
-    if (data?.success)
-      playerTableStore.update((players) => players.filter((p) => p.ffeId !== ffeId));
   }
 </script>
 
@@ -72,27 +62,16 @@
       {#each $playerTableStore as { firstName, lastName, fideId, ffeId, email, phone1, rating, role, visible }}
         <tr class:d-none={!visible} id={ffeId}>
           <td>{lastName} {firstName}</td>
-          <td>{ffeId}</td>
+          <td>
+            <a href="/joueurs/{ffeId}">{ffeId}</a>
+          </td>
           <td>{fideId || ""}</td>
           <td>{email}</td>
           <td>{phone1 ?? ""}</td>
           <td>{rating || ""}</td>
           <td class="align-middle">
             <div class="d-flex justify-content-center align-items-center gap-2">
-              {#if user.role < role || user.ffeId === ffeId}
-                <a href="/joueurs/{ffeId}/modifier" class="btn btn-primary">
-                  <i class="bi bi-pen-fill" />
-                </a>
-                {#if user.role < role}
-                  <a
-                    href="/joueurs/{ffeId}/supprimer"
-                    class="btn btn-danger"
-                    on:click|preventDefault={() => deletePlayer(ffeId)}
-                  >
-                    <i class="bi bi-trash-fill" />
-                  </a>
-                {/if}
-              {/if}
+              <PlayerButtons playerFfeId={ffeId} playerRole={role} {user} />
             </div>
           </td>
         </tr>

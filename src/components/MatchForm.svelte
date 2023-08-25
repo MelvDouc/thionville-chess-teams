@@ -24,6 +24,7 @@
     whiteOnOdds: true,
     captainFfeId: "",
     lineup: getEmptyLineUp(),
+    availableFfeIds: [],
   };
 
   lineupStore.set(data.lineup ?? getEmptyLineUp());
