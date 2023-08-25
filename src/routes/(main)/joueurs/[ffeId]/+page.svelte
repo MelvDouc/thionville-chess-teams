@@ -1,6 +1,6 @@
 <script lang="ts">
+  import PlayerButtons from "$components/PlayerButtons.svelte";
   import { roleTranslations } from "$lib/PlayerRole.js";
-  import PlayerButtons from "../../../../components/PlayerButtons.svelte";
 
   export let data: { player: App.PublicPlayer; user: App.User };
 
@@ -30,7 +30,7 @@
 <div class="wrapper mb-4">
   {#each Object.entries(player) as [key, value]}
     {#if value != null && value !== ""}
-      <div class="mb-3">
+      <div class="mb-3 item">
         <h3 class="my-1">{key}</h3>
         <div>{value}</div>
       </div>
@@ -43,5 +43,9 @@
 <style scoped>
   .wrapper {
     columns: 2;
+  }
+
+  .item {
+    break-inside: avoid-column;
   }
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PlayerForm from "$components/PlayerForm.svelte";
+  import PlayerForm from "$components/forms/PlayerForm.svelte";
 
   export let data: { userRole: number };
   export let form: { errors?: string[] } | null;

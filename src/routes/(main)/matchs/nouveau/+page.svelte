@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MatchForm from "$components/MatchForm.svelte";
+  import MatchForm from "$components/forms/MatchForm.svelte";
 
   export let data: { players: App.PublicPlayer[] };
   let errors: string[] | null = null;

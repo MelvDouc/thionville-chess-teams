@@ -40,7 +40,7 @@
 
   function updateLineUp(board: number) {
     return ({ target }: Event) => {
-      const player = playersByFfeIdMap.get((target as HTMLSelectElement).value);
+      const player = playersByFfeIdMap.get((target as HTMLInputElement).value);
       const item = player
         ? {
             name: `${player.firstName} ${player.lastName}`,
@@ -55,14 +55,14 @@
 </script>
 
 <div class="tableWrapper">
-  <table class="table table-dark table-striped">
+  <table class="table table-dark table-bordered table-striped">
     <thead>
       <tr>
-        <th>Éch.</th>
-        <th>Prénom NOM</th>
-        <th>Code FFE</th>
-        <th>Elo</th>
-        <th>Capitaine</th>
+        <th style="width: 7.5%;">Éch.</th>
+        <th style="width: 47.5%;">Prénom NOM</th>
+        <th style="width: 17.5%;">Code FFE</th>
+        <th style="width: 17.5%;">Elo</th>
+        <th style="width: 10%;">Capitaine</th>
       </tr>
     </thead>
     <tbody>
@@ -70,39 +70,45 @@
         <tr>
           <td>{board}{whiteOnOdds === (+board % 2 === 1) ? "B" : "N"}</td>
           <td>
-            <select class="form-select" on:change={updateLineUp(+board)}>
-              <option value="">&nbsp;</option>
-              {#each players as { firstName, lastName, ffeId }}
-                <option value={ffeId} selected={item?.ffeId === ffeId}
-                  >{firstName} {lastName}</option
-                >
-              {/each}
-            </select>
+            <input
+              type="text"
+              list="players-dl"
+              value={item?.name ?? ""}
+              on:input={updateLineUp(+board)}
+            />
           </td>
           <td>{item?.ffeId ?? ""}</td>
           <td>
             <input
               type="number"
-              class="ratingInput form-control"
+              class="ratingInput"
               min={0}
               max={9999}
               value={item?.rating}
               on:input={updateRating(+board)}
             />
           </td>
-          <td>
-            <input
-              type="radio"
-              name="captainFfeId"
-              value={item?.ffeId}
-              checked={!!captainFfeId && item?.ffeId === captainFfeId}
-              on:change={updateCaptainFfeId(+board)}
-            />
+          <td class="align-middle">
+            <div class="text-center">
+              <input
+                type="radio"
+                name="captainFfeId"
+                value={item?.ffeId}
+                checked={!!captainFfeId && item?.ffeId === captainFfeId}
+                on:change={updateCaptainFfeId(+board)}
+              />
+            </div>
           </td>
         </tr>
       {/each}
     </tbody>
   </table>
+
+  <datalist id="players-dl">
+    {#each players as { firstName, lastName, ffeId }}
+      <option value={ffeId}>{firstName} {lastName}</option>
+    {/each}
+  </datalist>
 </div>
 
 <style scoped>

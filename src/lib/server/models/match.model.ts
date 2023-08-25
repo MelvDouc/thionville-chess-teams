@@ -1,5 +1,6 @@
 import { ObjectId, db, type Filter } from "$lib/server/database.js";
-import { Cast as C, Validation as V, type CastingTypes } from "shape-and-form";
+import { Cast as C, Validation as V } from "shape-and-form";
+import type ObjectCast from "shape-and-form/dist/casting/Cast/ObjectCast.js";
 
 const CreateSchema = C.object({
   season: C.number().round("trunc"),
@@ -22,7 +23,7 @@ const CreateSchema = C.object({
         })
         .optional();
       return acc;
-    }, {} as Record<number, CastingTypes.Cast<App.LineUpItem>>)
+    }, {} as Record<number, ObjectCast<true, false, object>>)
   )
 });
 
@@ -87,8 +88,8 @@ export async function createMatch(data: App.Match): Promise<App.ApiResponse<{ in
 }
 
 export async function updateMatch(_id: string, data: App.Match): Promise<App.ApiResponse> {
-  const update = CreateSchema.cast(data);
-  const errors = ValidationSchema.getErrors(update);
+  const update = CreateSchema.partial().cast(data);
+  const errors = ValidationSchema.partial().getErrors(update);
 
   if (errors.length)
     return { success: false, errors };

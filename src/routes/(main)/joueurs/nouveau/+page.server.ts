@@ -1,3 +1,4 @@
+import { toObject } from "$lib/form-data.js";
 import { createPlayer } from "$lib/server/models/player.model.js";
 import { redirect } from "@sveltejs/kit";
 
@@ -6,12 +7,11 @@ export const actions = {
     if (!user)
       throw redirect(302, "/");
 
-    const formData = await request.formData();
-    const data = Object.fromEntries([...formData]);
-    const insertResult = await createPlayer(data, user.role);
+    const formData = toObject<{ [K in keyof App.PublicPlayer]: string }>(await request.formData());
+    const insertResult = await createPlayer(formData, user.role);
 
-    if (insertResult.acknowledged)
-      throw redirect(302, `/joueurs#${data.ffeId}`);
+    if (insertResult.success)
+      throw redirect(302, `/joueurs#${formData.ffeId}`);
 
     return {
       errors: (insertResult as { errors: string[]; }).errors
