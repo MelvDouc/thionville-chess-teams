@@ -29,7 +29,7 @@
 
 <div class="wrapper mb-4">
   {#each Object.entries(player) as [key, value]}
-    {#if value != null}
+    {#if value != null && value !== ""}
       <div class="mb-3">
         <h3 class="my-1">{key}</h3>
         <div>{value}</div>

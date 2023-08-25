@@ -38,7 +38,7 @@
             <td>
               <address class="m-0">
                 <div>{address}</div>
-                <div>{zipCode} {city}</div>
+                <div>{zipCode} {city.toLocaleUpperCase()}</div>
               </address>
             </td>
             <td>{formatDate(date)}</td>

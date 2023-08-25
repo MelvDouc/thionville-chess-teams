@@ -8,7 +8,11 @@
 
   const indexedPlayers = players.map((p, index) => ({ ...p, index, visible: true }));
   const searchableValues = players.reduce((acc, { ffeId, firstName, lastName, email }) => {
-    acc[ffeId] = ffeId + firstName + lastName + email;
+    acc[ffeId] =
+      ffeId.toLowerCase() +
+      firstName.toLocaleLowerCase() +
+      lastName.toLocaleLowerCase() +
+      email.toLowerCase();
     return acc;
   }, {} as Record<string, string>);
 
@@ -63,7 +67,7 @@
         <tr class:d-none={!visible} id={ffeId}>
           <td>{lastName} {firstName}</td>
           <td>
-            <a href="/joueurs/{ffeId}">{ffeId}</a>
+            <a href="/joueurs/{ffeId}" title="Fiche joueur">{ffeId}</a>
           </td>
           <td>{fideId || ""}</td>
           <td>{email}</td>

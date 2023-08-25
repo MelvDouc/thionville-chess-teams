@@ -55,7 +55,7 @@
 </script>
 
 <div class="tableWrapper">
-  <table class="table table-striped">
+  <table class="table table-dark table-striped">
     <thead>
       <tr>
         <th>Éch.</th>
@@ -70,7 +70,7 @@
         <tr>
           <td>{board}{whiteOnOdds === (+board % 2 === 1) ? "B" : "N"}</td>
           <td>
-            <select on:change={updateLineUp(+board)}>
+            <select class="form-select" on:change={updateLineUp(+board)}>
               <option value="">&nbsp;</option>
               {#each players as { firstName, lastName, ffeId }}
                 <option value={ffeId} selected={item?.ffeId === ffeId}
@@ -83,7 +83,7 @@
           <td>
             <input
               type="number"
-              class="ratingInput"
+              class="ratingInput form-control"
               min={0}
               max={9999}
               value={item?.rating}
@@ -95,7 +95,7 @@
               type="radio"
               name="captainFfeId"
               value={item?.ffeId}
-              checked={captainFfeId !== null && item?.ffeId === captainFfeId}
+              checked={!!captainFfeId && item?.ffeId === captainFfeId}
               on:change={updateCaptainFfeId(+board)}
             />
           </td>
@@ -107,6 +107,7 @@
 
 <style scoped>
   .ratingInput {
-    width: 5rem;
+    min-width: 2rem;
+    max-width: 5rem;
   }
 </style>

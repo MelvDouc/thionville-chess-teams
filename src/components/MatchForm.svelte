@@ -3,7 +3,7 @@
   import { getDatePortion } from "$lib/date-formatter.js";
   import lineupStore, { getEmptyLineUp } from "$lib/stores/lineup.store.js";
   import FormGroup from "./FormGroup.svelte";
-  import LineUpTable from "./LineUpTable.svelte";
+  import LineUpTable from "./LineupTable.svelte";
 
   export let match: WithId<App.Match> | null;
   export let players: App.PublicPlayer[];

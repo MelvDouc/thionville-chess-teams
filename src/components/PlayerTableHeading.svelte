@@ -50,7 +50,7 @@
     position: relative;
 
     &::after {
-      $distToMiddle: 8.5%;
+      $distToMiddle: 5%;
       $y1: 50% - $distToMiddle;
       $y2: 50% + $distToMiddle;
       content: "";
