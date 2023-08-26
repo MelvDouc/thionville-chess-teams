@@ -49,7 +49,7 @@ export function getPlayers(): Promise<App.PublicPlayer[]> {
 
 export function createPlayer(data: object, userRole: PlayerRole) {
   try {
-    const player = CreateSchema.cast(data);
+    const player = CreateSchema.partial().cast(data);
     const errors = CreateValidationSchema(userRole).getErrors(player);
 
     if (errors.length)

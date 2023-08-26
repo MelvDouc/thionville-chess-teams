@@ -1,9 +1,9 @@
 <script lang="ts">
-  import FormGroup from "$components/FormGroup.svelte";
-  import FormCheckbox from "$components/FormRadio.svelte";
+  import FormGroup from "$components/form/FormGroup.svelte";
+  import FormCheckbox from "$components/form/FormRadio.svelte";
   import PlayerRole, { roleTranslations } from "$lib/PlayerRole.js";
   import { getDatePortion } from "$lib/date-formatter.js";
-  import FormWrapper from "./FormWrapper.svelte";
+  import FormWrapper from "../FormWrapper.svelte";
 
   export let player: App.Player | null;
   export let action: string;

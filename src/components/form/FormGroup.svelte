@@ -1,4 +1,6 @@
 <script lang="ts">
+  import FormLabel from "$components/form/FormLabel.svelte";
+
   export let id: string;
   export let type = "text";
   export let value: string | number | null | undefined = null;
@@ -15,9 +17,10 @@
   }
 </script>
 
-<label for={id} class="form-label" class:form-required={required}>
+<label for={id} class="form-label" class:form-required={required} />
+<FormLabel htmlFor={id} {required}>
   <slot />
-</label>
+</FormLabel>
 <input
   class="form-control"
   {id}

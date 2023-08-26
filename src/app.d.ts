@@ -11,6 +11,11 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 
+		type Form = {
+			success?: boolean;
+			errors: string[];
+		} | undefined;
+
 		type ApiResponse<T = object> = {
 			success: boolean;
 			errors?: string[];
