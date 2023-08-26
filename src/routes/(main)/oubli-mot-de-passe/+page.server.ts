@@ -1,9 +1,12 @@
-import { HOST } from "$env/static/private";
 import { PasswordResetTemplate, sendEmail } from "$lib/server/email.js";
 import { getPlayer, updatePlayer } from "$lib/server/models/player.model.js";
+import { error } from "@sveltejs/kit";
 
 export const actions = {
-  default: async ({ request, locals: { user } }) => {
+  default: async ({ request, url, locals }) => {
+    if (locals.user)
+      throw error(404);
+
     const formData = await request.formData();
     const ffeId = String(formData.get("ffeId") || "");
     const player = await getPlayer({ ffeId });
@@ -15,12 +18,22 @@ export const actions = {
       };
 
     const pwdResetId = crypto.randomUUID();
-    await updatePlayer(ffeId, { pwdResetId }, user?.role ?? NaN);
-    const html = PasswordResetTemplate({ firstName: player.firstName, link: `${HOST}/changement-mot-de-passe/${pwdResetId}` });
+    const updateResult = await updatePlayer(ffeId, { pwdResetId });
+
+    if (!updateResult.success)
+      return {
+        success: false,
+        errors: updateResult.errors
+      };
+
     await sendEmail({
       to: player.email,
       subject: "Réinitialisation du mot de passe",
-      html
+      html: PasswordResetTemplate({
+        firstName: player.firstName,
+        urlOrigin: url.origin,
+        pwdResetId
+      })
     });
 
     return {

@@ -1,6 +1,9 @@
 <script lang="ts">
+  import Form from "$components/form/Form.svelte";
+  import FormCol from "$components/form/FormCol.svelte";
   import FormGroup from "$components/form/FormGroup.svelte";
-  import FormWrapper from "$components/FormWrapper.svelte";
+  import FormRow from "$components/form/FormRow.svelte";
+  import FormSubmit from "$components/form/FormSubmit.svelte";
 
   export let form: App.Form;
 </script>
@@ -12,20 +15,16 @@
 {#if form?.success}
   <p>Un lien de réinitialisation vous a été envoyé par email.</p>
 {:else}
-  <FormWrapper errors={form?.errors ?? null}>
-    <form method="POST" class="form">
-      <div class="container d-flex flex-column gap-3 p-3">
-        <section class="row mb-3">
-          <div class="col-12">
-            <FormGroup id="ffeId" required>Code FFE</FormGroup>
-          </div>
-        </section>
-        <section class="row">
-          <div class="col-12">
-            <button class="btn btn-primary" type="submit">Valider</button>
-          </div>
-        </section>
-      </div>
-    </form>
-  </FormWrapper>
+  <Form method="POST" errors={form?.errors ?? null}>
+    <FormRow>
+      <FormCol>
+        <FormGroup id="ffeId" required>Code FFE</FormGroup>
+      </FormCol>
+    </FormRow>
+    <FormRow>
+      <FormCol>
+        <FormSubmit submitText="Valider" />
+      </FormCol>
+    </FormRow>
+  </Form>
 {/if}

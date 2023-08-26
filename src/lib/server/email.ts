@@ -17,26 +17,28 @@ export async function sendEmail(options: Required<Pick<SendMailOptions, "to" | "
     });
     return sendInfo;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return null;
   }
 }
 
-export function PasswordResetTemplate({ firstName, link }: {
+export function PasswordResetTemplate({ firstName, urlOrigin, pwdResetId }: {
   firstName: string;
-  link: string;
+  urlOrigin: string;
+  pwdResetId: string;
 }) {
+  const link = `${urlOrigin}/changement-mot-de-passe?id=${pwdResetId}`;
+
   return `<main>
     <p>Bonjour ${firstName},</p>
     <div style="margin-bottom: 1em;">
       <div>
-        Vous avez demandé la réinitialisation de votre mot de passe. Pour ce faire, veuillez suivre le
-        lien ci-dessous :
+        Vous avez demandé la réinitialisation de votre mot de passe. Pour ce faire, veuillez suivre le lien ci-dessous :
       </div>
       <div>
         <a href="${link}">${link}</a>
       </div>
     </div>
-    <p>&Agrave; bientôt,<br />L'admin de Thionville Échecs &mdash; Équipes</p>
+    <p>À bientôt,<br />L'admin de Thionville Échecs – Équipes</p>
   </main>`;
 }

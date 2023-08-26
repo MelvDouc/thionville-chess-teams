@@ -16,7 +16,9 @@ const CreateSchema = C.object({
   birthDate: C.date().optional(),
   membership: C.string().optional(),
   isMale: C.boolean(true),
-  rating: C.number(1199).round("trunc").optional()
+  rating: C.number(1199).round("trunc").optional(),
+  pwd: C.string().optional(),
+  pwdResetId: C.string().optional(),
 });
 
 function CreateValidationSchema(minRole: PlayerRole) {
@@ -28,6 +30,10 @@ function CreateValidationSchema(minRole: PlayerRole) {
     role: V.number().min(minRole, "Rôle non autorisé.").max(PlayerRole.USER, "Rôle non autorisé."),
     rating: V.number().integer().min(0, "Elo invalide.").max(9999, "Elo invalide.").optional()
   });
+}
+
+function UpdateValidationSchema(minRole: PlayerRole) {
+  return CreateValidationSchema(minRole).partial();
 }
 
 export async function getPlayer(filter: Filter<App.Player>): Promise<App.Player | null> {
@@ -57,22 +63,31 @@ export function createPlayer(data: object, userRole: PlayerRole) {
 
     return db.players.insertOne(player);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { success: false, errors: ["Une erreur s'est produite."] };
   }
 }
 
-export function updatePlayer(ffeId: string, data: object, userRole: PlayerRole) {
+export async function updatePlayer(ffeId: string, data: object, unset: string[] = []) {
   try {
-    const update = CreateSchema.cast(data);
-    const errors = CreateValidationSchema(userRole).getErrors(update);
+    const update = CreateSchema.partial().cast(data);
+    const errors = UpdateValidationSchema(PlayerRole.WEBMASTER).getErrors(update);
 
     if (errors.length)
-      return { acknowledged: false, errors };
+      return { success: false, errors };
 
-    return db.players.replaceOne({ ffeId }, { ...update, ffeId });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { ffeId: _, ...updateWithoutFfeId } = update;
+    const updateResult = await db.players.updateOne({ ffeId }, {
+      $set: updateWithoutFfeId,
+      $unset: unset.reduce((acc, key) => { acc[key] = ""; return acc; }, {} as Record<string, "">)
+    });
+    return {
+      success: updateResult.acknowledged,
+      errors: null
+    };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { success: false, errors: ["Une erreur s'est produite."] };
   }
 }
