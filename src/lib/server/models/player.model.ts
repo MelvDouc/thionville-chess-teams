@@ -32,6 +32,10 @@ function CreateValidationSchema(minRole: PlayerRole) {
   });
 }
 
+function UpdateValidationSchema(minRole: PlayerRole) {
+  return CreateValidationSchema(minRole).partial();
+}
+
 export async function getPlayer(filter: Filter<App.Player>): Promise<App.Player | null> {
   const player = await db.players.findOne(filter);
   if (!player)
