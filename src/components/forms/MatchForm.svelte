@@ -8,7 +8,7 @@
   import FormRow from "$components/form/FormRow.svelte";
   import FormSubmit from "$components/form/FormSubmit.svelte";
   import FormTextarea from "$components/form/FormTextarea.svelte";
-  import { getDatePortion } from "$lib/date-formatter.js";
+  import { getCurrentSeason, getDatePortion } from "$lib/date-formatter.js";
   import lineupStore, { getEmptyLineUp } from "$lib/stores/lineup.store.js";
 
   export let match: WithId<App.Match> | null;
@@ -19,7 +19,7 @@
   const _id = match?._id ?? "";
   const data = match ?? {
     _id,
-    season: new Date().getFullYear(),
+    season: getCurrentSeason(),
     round: 1,
     teamName: "",
     opponent: "",
