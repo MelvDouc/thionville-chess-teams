@@ -1,10 +1,17 @@
 <script lang="ts">
-  import type { Writable } from "svelte/store";
+  import matchStore from "$lib/stores/match.store.js";
 
-  export let lineupStore: Writable<App.Match["lineup"]>;
   export let players: App.PublicPlayer[];
-  export let whiteOnOdds: App.Match["whiteOnOdds"];
-  export let captainFfeId: App.Player["ffeId"] | null;
+
+  let whiteOnOdds: boolean;
+  let captainFfeId: string | null;
+  let lineup: App.Match["lineup"];
+
+  matchStore.subscribe((value) => {
+    whiteOnOdds = value.whiteOnOdds;
+    captainFfeId = value.captainFfeId;
+    lineup = value.lineup;
+  });
 
   players.sort(
     (a, b) => a.firstName.localeCompare(b.firstName) || a.lastName.localeCompare(b.lastName)
@@ -16,29 +23,49 @@
 
   function updateCaptainFfeId(board: number) {
     return ({ target }: Event) => {
-      if ((target as HTMLInputElement).checked) {
-        const ffeId = $lineupStore[board]?.ffeId;
-        ffeId && (captainFfeId = ffeId);
-      }
+      if (!(target as HTMLInputElement).checked) return;
+      const ffeId = lineup[board]?.ffeId;
+      if (ffeId)
+        matchStore.update((value) => ({
+          ...value,
+          captainFfeId: ffeId,
+        }));
     };
   }
 
   function updateRating(board: number) {
     return ({ target }: Event) => {
-      const item = $lineupStore[board];
+      const item = lineup[board];
       if (!item) return;
 
       const rating = (target as HTMLInputElement).valueAsNumber;
-      if (isNaN(rating)) {
-        delete item.rating;
+
+      if (!rating) {
+        const { rating: _r, ...others } = item;
+        matchStore.update((value) => ({
+          ...value,
+          lineup: {
+            ...value.lineup,
+            [board]: others,
+          },
+        }));
         return;
       }
 
-      item.rating = rating;
+      matchStore.update((value) => ({
+        ...value,
+        lineup: {
+          ...value.lineup,
+          [board]: {
+            ...item,
+            rating,
+          },
+        },
+      }));
     };
   }
 
-  function updateLineUp(board: number) {
+  function updateLineup(board: number) {
     return ({ target }: Event) => {
       const player = playersByFfeIdMap.get((target as HTMLInputElement).value);
       const item = player
@@ -49,7 +76,13 @@
           }
         : null;
 
-      lineupStore.update((prev) => ({ ...prev, [board]: item }));
+      matchStore.update((prev) => ({
+        ...prev,
+        lineup: {
+          ...prev.lineup,
+          [board]: item,
+        },
+      }));
     };
   }
 </script>
@@ -66,7 +99,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each Object.entries($lineupStore) as [board, item]}
+      {#each Object.entries(lineup) as [board, item]}
         <tr>
           <td>{board}{whiteOnOdds === (+board % 2 === 1) ? "B" : "N"}</td>
           <td>
@@ -74,7 +107,7 @@
               type="text"
               list="players-dl"
               value={item?.name ?? ""}
-              on:input={updateLineUp(+board)}
+              on:input={updateLineup(+board)}
             />
           </td>
           <td>{item?.ffeId ?? ""}</td>

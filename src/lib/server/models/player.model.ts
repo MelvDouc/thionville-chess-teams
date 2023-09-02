@@ -75,7 +75,7 @@ export async function createPlayer(data: object, userRole: PlayerRole) {
 export async function updatePlayer(ffeId: string, data: object, unset: string[] = []) {
   try {
     const update = CreateSchema.partial().cast(data);
-    const errors = CreateValidationSchema(PlayerRole.WEBMASTER).partial().getErrors(update);
+    const errors = UpdateValidationSchema(PlayerRole.WEBMASTER).getErrors(update);
 
     if (errors.length)
       return { success: false, errors };

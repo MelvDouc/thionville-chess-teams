@@ -25,9 +25,13 @@ export function getUser(cookies: Cookies): App.User | null {
   if (!token)
     return null;
 
-  const user = verify(token, JWT_PRIVATE_KEY) as JwtPayload;
-
-  return (isUser(user)) ? user : null;
+  try {
+    const user = verify(token, JWT_PRIVATE_KEY) as JwtPayload;
+    return isUser(user) ? user : null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
 function isUser(arg: unknown): arg is App.User {

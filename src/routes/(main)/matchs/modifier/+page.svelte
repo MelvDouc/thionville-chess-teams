@@ -1,8 +1,11 @@
 <script lang="ts">
   import MatchForm from "$components/forms/MatchForm.svelte";
+  import matchStore from "$lib/stores/match.store.js";
 
   export let data: { match: WithId<App.Match>; players: App.Player[] };
   let errors: string[] | null = null;
+
+  matchStore.set(data.match);
 </script>
 
 <svelte:head>
@@ -10,7 +13,6 @@
 </svelte:head>
 
 <MatchForm
-  match={data.match}
   players={data.players}
   {errors}
   handleSubmit={async (match) => {

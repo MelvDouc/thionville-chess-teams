@@ -1,12 +1,13 @@
 <script lang="ts">
+  import PlayerButtons from "$components/PlayerButtons.svelte";
   import PlayerTableHeading from "$components/PlayerTableHeading.svelte";
+  import PlayersTableSearch from "$components/PlayersTableSearch.svelte";
   import playerTableStore from "$lib/stores/player-table.store.js";
-  import PlayerButtons from "./PlayerButtons.svelte";
 
   export let players: App.PublicPlayer[];
   export let user: App.User;
+  let search = "";
 
-  const indexedPlayers = players.map((p, index) => ({ ...p, index, visible: true }));
   const searchableValues = players.reduce((acc, { ffeId, firstName, lastName, email }) => {
     acc[ffeId] =
       ffeId.toLowerCase() +
@@ -16,25 +17,26 @@
     return acc;
   }, {} as Record<string, string>);
 
-  playerTableStore.set(indexedPlayers);
+  playerTableStore.set(
+    players.map((p, index) => ({
+      ...p,
+      index,
+      visible: true,
+    }))
+  );
 
-  function lookUpPlayer({ target }: Event) {
-    const search = (target as HTMLInputElement).value.trim().toLocaleLowerCase();
-
-    playerTableStore.update((players) => {
-      return players.map((player) => {
-        return {
-          ...player,
-          visible: !search || searchableValues[player.ffeId].includes(search),
-        };
-      });
-    });
-  }
+  $: search,
+    (() => {
+      playerTableStore.update((prev) =>
+        prev.map(({ ...p }) => ({
+          ...p,
+          visible: !search || searchableValues[p.ffeId].includes(search),
+        }))
+      );
+    })();
 </script>
 
-<div class="mb-3">
-  <input type="search" placeholder="Chercher un joueur..." on:input={lookUpPlayer} />
-</div>
+<PlayersTableSearch bind:value={search} />
 
 <div class="tableWrapper">
   <table class="table table-light table-striped">

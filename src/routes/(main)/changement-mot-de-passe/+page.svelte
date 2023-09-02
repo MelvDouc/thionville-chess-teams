@@ -8,6 +8,10 @@
   export let form: App.Form;
 </script>
 
+<svelte:head>
+  <title>Changement de mot de passe</title>
+</svelte:head>
+
 {#if form?.success}
   <p>
     Votre mot de passe a bien été mis à jour. Vous pouvez <a href="/connexion">vous connecter</a>.

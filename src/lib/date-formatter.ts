@@ -13,3 +13,9 @@ export function formatDate(date: Date) {
 export function getDatePortion(date: Date): string {
   return date.toISOString().split("T")[0];
 }
+
+export function getCurrentSeason() {
+  const today = new Date(),
+    year = today.getFullYear();
+  return (today.getMonth() < 6) ? year : year + 1;
+}

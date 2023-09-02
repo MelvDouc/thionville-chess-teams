@@ -43,7 +43,7 @@ export async function load({ params: { season, round, teamName } }) {
     [parity]: {
       lineup: parityLineUp,
       club: match.teamName,
-      cap: Object.values(match.lineup).find((item) => item?.ffeId === match.captainFfeId)?.name
+      cap: Object.values(match.lineup).find((item) => item?.ffeId === match.captainFfeId)?.name ?? ""
     },
     [oppositeParity]: {
       lineup: oppositeParityLineUp,
