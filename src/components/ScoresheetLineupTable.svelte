@@ -1,6 +1,8 @@
 <script lang="ts">
+  import type { ScoreSheetTeam } from "$lib/types";
+
   export let parity: "pairs" | "impairs";
-  export let team: Scoresheet.Team;
+  export let team: ScoreSheetTeam;
 </script>
 
 <table class="lineup-table__top">

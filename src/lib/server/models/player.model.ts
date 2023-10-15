@@ -1,6 +1,12 @@
-import PlayerRole from "$lib/PlayerRole.js";
-import { db, type Filter } from "$lib/server/database.js";
+import PlayerRole from "$lib/PlayerRole";
+import { db } from "$lib/server/database";
+import { hashPassword } from "$lib/services/password.service";
+import { fetchRating } from "$lib/services/rating-scraper.service";
+import type { ApiResponse, Player, PublicPlayer, User } from "$lib/types";
+import type { Filter } from "mongodb";
 import { Cast as C, Validation as V } from "shape-and-form";
+
+const defaultError = "Une erreur s'est produite.";
 
 const CreateSchema = C.object({
   ffeId: C.string(),
@@ -36,24 +42,21 @@ function UpdateValidationSchema(minRole: PlayerRole) {
   return CreateValidationSchema(minRole).partial();
 }
 
-export async function getPlayer(filter: Filter<App.Player>): Promise<App.Player | null> {
+export async function getPlayer(filter: Filter<Player>): Promise<Player | null> {
   const player = await db.players.findOne(filter);
-  if (!player)
-    return null;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  if (!player) return null;
   const { _id, ...others } = player;
   return others;
 }
 
-export function getPlayers(): Promise<App.PublicPlayer[]> {
+export function getPlayers(): Promise<PublicPlayer[]> {
   return db.players
     .find()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .map(({ _id, pwd, pwdResetId, ...others }) => others)
     .toArray();
 }
 
-export async function createPlayer(data: object, userRole: PlayerRole) {
+export async function createPlayer(data: object, userRole: PlayerRole): Promise<ApiResponse & { insertedId?: string; }> {
   try {
     const player = CreateSchema.partial().cast(data);
     const errors = CreateValidationSchema(userRole).getErrors(player);
@@ -62,17 +65,19 @@ export async function createPlayer(data: object, userRole: PlayerRole) {
       return { success: false, errors };
 
     const insertResult = await db.players.insertOne(player);
+    if (!insertResult.acknowledged || !insertResult.insertedId)
+      return { success: false, errors: [defaultError] };
+
     return {
-      success: insertResult.acknowledged,
-      insertedId: insertResult.insertedId
+      success: true,
+      insertedId: insertResult.insertedId.toHexString()
     };
-  } catch (error) {
-    console.error(error);
-    return { success: false, errors: ["Une erreur s'est produite."] };
+  } catch {
+    return { success: false, errors: [defaultError] };
   }
 }
 
-export async function updatePlayer(ffeId: string, data: object, unset: string[] = []) {
+export async function updatePlayer(ffeId: string, data: object): Promise<ApiResponse> {
   try {
     const update = CreateSchema.partial().cast(data);
     const errors = UpdateValidationSchema(PlayerRole.WEBMASTER).getErrors(update);
@@ -80,27 +85,58 @@ export async function updatePlayer(ffeId: string, data: object, unset: string[] 
     if (errors.length)
       return { success: false, errors };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ffeId: _, ...updateWithoutFfeId } = update;
-    const updateResult = await db.players.updateOne({ ffeId }, {
-      $set: updateWithoutFfeId,
-      $unset: unset.reduce((acc, key) => { acc[key] = ""; return acc; }, {} as Record<string, "">)
+    const { acknowledged } = await db.players.updateOne({ ffeId }, {
+      $set: updateWithoutFfeId
     });
-    return {
-      success: updateResult.acknowledged,
-      errors: null
-    };
+
+    if (!acknowledged)
+      return { success: false, errors: [defaultError] };
+
+    return { success: true };
   } catch (error) {
     console.error(error);
-    return { success: false, errors: ["Une erreur s'est produite."] };
+    return { success: false, errors: [defaultError] };
   }
 }
 
-export async function deletePlayer(ffeId: App.Player["ffeId"], user: App.User) {
+export async function updatePlayerPassword(ffeId: string, plainPassword: string) {
+  const hash = await hashPassword(plainPassword);
+  await db.players.updateOne({ ffeId }, {
+    $set: { pwd: hash },
+    $unset: { pwdResetId: "" }
+  });
+}
+
+export async function deletePlayer(ffeId: Player["ffeId"], user: User): Promise<ApiResponse> {
   const player = await getPlayer({ ffeId });
 
-  if (player && user.role < player.role)
-    return db.players.deleteOne({ ffeId });
+  if (!player || user.role >= player.role || user.role > PlayerRole.ADMIN)
+    return {
+      success: false,
+      errors: ["Action non autorisée."]
+    };
 
-  return null;
+  const { acknowledged } = await db.players.deleteOne({ ffeId });
+
+  if (!acknowledged)
+    return {
+      success: false,
+      errors: [defaultError]
+    };
+
+  return { success: true };
+}
+
+export async function updateRatings() {
+  const updates: Promise<unknown>[] = [];
+
+  for await (const player of db.players.find()) {
+    if (!player.fideId) continue;
+    const rating = await fetchRating(player.fideId);
+    if (rating !== null)
+      updates.push(updatePlayer(player.ffeId, { rating }));
+  }
+
+  await Promise.all(updates);
 }

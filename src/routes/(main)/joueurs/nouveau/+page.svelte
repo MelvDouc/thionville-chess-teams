@@ -1,19 +1,47 @@
 <script lang="ts">
   import PlayerForm from "$components/forms/PlayerForm.svelte";
+  import PlayerRole from "$lib/PlayerRole";
+  import apiService from "$lib/services/api.service";
+  import type { ApiResponse, PublicPlayer } from "$lib/types";
 
   export let data: { userRole: number };
-  export let form: { errors?: string[] } | null;
+  let errors: string[] | null = null;
+
+  async function handleSubmit(player: PublicPlayer) {
+    const response = await apiService.post<ApiResponse>({
+      url: "/joueurs/nouveau",
+      data: player,
+    });
+
+    if (!response?.success) {
+      if (response?.errors) errors = response.errors;
+      return;
+    }
+
+    location.assign(`/joueurs/${player.ffeId}`);
+  }
 </script>
 
 <svelte:head>
-  <title>Créer un joueur</title>
+  <title>Ajouter un joueur</title>
 </svelte:head>
 
-<div class="container-center">
-  <PlayerForm
-    player={null}
-    action="/joueurs/nouveau"
-    errors={form?.errors ?? null}
-    userRole={data.userRole}
-  />
-</div>
+<PlayerForm
+  {handleSubmit}
+  player={{
+    email: "",
+    ffeId: "",
+    firstName: "",
+    lastName: "",
+    rating: 1199,
+    role: PlayerRole.USER,
+    isMale: true,
+    membership: "",
+    phone1: "",
+    phone2: "",
+    team1: "",
+    team2: "",
+  }}
+  {errors}
+  userRole={data.userRole}
+/>

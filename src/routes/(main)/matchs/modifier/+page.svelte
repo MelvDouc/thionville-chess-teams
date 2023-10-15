@@ -1,36 +1,28 @@
 <script lang="ts">
   import MatchForm from "$components/forms/MatchForm.svelte";
-  import matchStore from "$lib/stores/match.store.js";
+  import apiService from "$lib/services/api.service";
+  import type { ApiResponse, Match, PublicPlayer } from "$lib/types";
 
-  export let data: { match: WithId<App.Match>; players: App.Player[] };
+  export let data: { match: Match; _id: string; players: PublicPlayer[] };
   let errors: string[] | null = null;
 
-  matchStore.set(data.match);
+  async function handleSubmit(match: Match) {
+    const updateResult = await apiService.put<ApiResponse>({
+      url: `/matchs/modifier?_id=${data._id}`,
+      data: match,
+    });
+
+    if (!updateResult?.success) {
+      if (updateResult?.errors) errors = updateResult.errors;
+      return;
+    }
+
+    location.assign(`/matchs/${match.season}`);
+  }
 </script>
 
 <svelte:head>
   <title>Modifier un match</title>
 </svelte:head>
 
-<MatchForm
-  players={data.players}
-  {errors}
-  handleSubmit={async (match) => {
-    const response = await fetch(`/matchs/modifier?_id=${match._id}`, {
-      method: "PUT",
-      body: JSON.stringify(match),
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-    const updateResult = await response.json();
-
-    if (!updateResult.success) {
-      console.log({ errors });
-      errors = updateResult.errors;
-      return;
-    }
-
-    location.assign(`/matchs/${match.season}`);
-  }}
-/>
+<MatchForm players={data.players} match={data.match} {errors} {handleSubmit} />

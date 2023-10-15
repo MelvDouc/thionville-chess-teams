@@ -1,26 +1,25 @@
 <script lang="ts">
   import MatchForm from "$components/forms/MatchForm.svelte";
-  import { getCurrentSeason } from "$lib/date-formatter.js";
-  import matchStore from "$lib/stores/match.store.js";
+  import apiService from "$lib/services/api.service";
+  import { getCurrentSeason } from "$lib/services/date.service";
+  import type { ApiResponse, Match, PublicPlayer } from "$lib/types";
 
-  export let data: { players: App.PublicPlayer[] };
+  export let data: { players: PublicPlayer[] };
   let errors: string[] | null = null;
 
-  matchStore.set({
-    _id: "",
-    season: getCurrentSeason(),
-    round: 1,
-    teamName: "",
-    opponent: "",
-    address: "3 rue du cygne",
-    city: "Thionville",
-    zipCode: "57100",
-    date: new Date(),
-    whiteOnOdds: true,
-    captainFfeId: "",
-    lineup: matchStore.getEmptyLineUp(),
-    availableFfeIds: [],
-  });
+  async function handleSubmit(match: Match) {
+    const insertResult = await apiService.post<ApiResponse>({
+      url: "/matchs/nouveau",
+      data: match,
+    });
+
+    if (!insertResult?.success) {
+      if (insertResult?.errors) errors = insertResult.errors;
+      return;
+    }
+
+    location.assign(`/matchs/${match.season}`);
+  }
 </script>
 
 <svelte:head>
@@ -29,24 +28,21 @@
 
 <div class="container-center">
   <MatchForm
+    match={{
+      season: getCurrentSeason(),
+      round: 1,
+      teamName: "",
+      opponent: "",
+      address: "3 rue du cygne",
+      city: "Thionville",
+      zipCode: "57100",
+      date: new Date(),
+      whiteOnOdds: true,
+      captainFfeId: "",
+      lineup: Array(8).fill(null),
+    }}
     players={data.players}
     {errors}
-    handleSubmit={async (data) => {
-      const response = await fetch("/matchs/nouveau", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const insertResult = await response.json();
-
-      if (insertResult.errors) {
-        errors = insertResult.errors;
-        return;
-      }
-
-      location.assign(`/matchs/${data.season}`);
-    }}
+    {handleSubmit}
   />
 </div>

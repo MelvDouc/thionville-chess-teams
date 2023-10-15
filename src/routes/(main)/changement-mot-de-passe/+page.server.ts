@@ -1,6 +1,5 @@
-import { toObject } from "$lib/form-data.js";
-import { hashPassword } from "$lib/password.js";
-import { getPlayer, updatePlayer } from "$lib/server/models/player.model.js";
+import { toObject } from "$lib/form-data";
+import { getPlayer, updatePlayerPassword } from "$lib/server/models/player.model";
 import { error } from "@sveltejs/kit";
 
 export const actions = {
@@ -26,9 +25,7 @@ export const actions = {
         errors: ["Les mots de passe ne se correspondent pas."]
       };
 
-    await updatePlayer(player.ffeId, { pwd: await hashPassword(pwd) }, ["pwdResetId"]);
-    return {
-      success: true,
-    };
+    await updatePlayerPassword(player.ffeId, pwd);
+    return { success: true };
   }
 };

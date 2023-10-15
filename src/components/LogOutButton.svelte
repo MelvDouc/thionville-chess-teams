@@ -1,5 +1,7 @@
 <script lang="ts">
-  export let user: App.User;
+  import type { User } from "$lib/types";
+
+  export let user: User;
 
   function confirmLogOut({ target }: SubmitEvent) {
     if (

@@ -1,4 +1,4 @@
-import { logOut } from "$lib/auth.js";
+import { logOut } from "$lib/services/auth.service";
 import { redirect } from "@sveltejs/kit";
 
 export const actions = {

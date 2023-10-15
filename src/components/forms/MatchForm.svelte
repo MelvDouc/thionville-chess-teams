@@ -1,94 +1,129 @@
 <script lang="ts">
-  import LineUpTable from "$components/LineupTable.svelte";
-  import Form from "$components/form/Form.svelte";
-  import FormCheckbox from "$components/form/FormCheckbox.svelte";
-  import FormCol from "$components/form/FormCol.svelte";
-  import FormGroup from "$components/form/FormGroup.svelte";
-  import FormLabel from "$components/form/FormLabel.svelte";
-  import FormRow from "$components/form/FormRow.svelte";
-  import FormSubmit from "$components/form/FormSubmit.svelte";
-  import FormTextarea from "$components/form/FormTextarea.svelte";
-  import { getDatePortion } from "$lib/date-formatter.js";
-  import matchStore from "$lib/stores/match.store.js";
+  import LineupTable from "$components/LineupTable.svelte";
+  import FormContainer from "$components/form/FormContainer.svelte";
+  import FormErrors from "$components/form/FormErrors.svelte";
+  import FormSubmitRow from "$components/form/FormSubmitRow.svelte";
+  import { getDatePortion } from "$lib/services/date.service";
+  import type { Match, PublicPlayer } from "$lib/types";
 
-  export let players: App.PublicPlayer[];
-  export let handleSubmit: (match: WithId<App.Match>) => void | Promise<void>;
+  export let players: PublicPlayer[];
+  export let handleSubmit: (match: Match) => void | Promise<void>;
   export let errors: string[] | null;
-
-  let match: WithId<App.Match>;
-
-  matchStore.subscribe((prev) => (match = prev));
+  export let match: Match;
 
   function updateDate({ target }: Event) {
-    const newDate = (target as HTMLInputElement).valueAsDate;
-    if (newDate) {
-      matchStore.update((prev) => ({
-        ...prev,
-        date: newDate,
-      }));
-    }
+    const date = (target as HTMLInputElement).valueAsDate;
+    if (date !== null) match.date = date;
   }
 </script>
 
-<Form {errors} handleSubmit={() => handleSubmit(match)}>
-  <FormRow>
-    <FormCol cols={12} sm={4}>
-      <FormGroup id="season" type="number" placeholder="2023" bind:value={match.season} required
-        >Saison</FormGroup
-      >
-    </FormCol>
-    <FormCol cols={12} sm={2}>
-      <FormGroup id="round" type="number" min={1} bind:value={match.round} required>Ronde</FormGroup
-      >
-    </FormCol>
-    <FormCol cols={12} sm={6}>
-      <FormGroup
-        id="date"
-        type="date"
-        min={1}
-        value={getDatePortion(match.date)}
-        handleInput={updateDate}
-        required>Date</FormGroup
-      >
-    </FormCol>
-  </FormRow>
-  <FormRow>
-    <FormCol sm={6}>
-      <FormGroup id="opponent" bind:value={match.opponent} required>Adversaire</FormGroup>
-    </FormCol>
-    <FormCol sm={6}>
-      <FormGroup id="teamName" placeholder="Thionville I" bind:value={match.teamName} required
-        >Équipe</FormGroup
-      >
-    </FormCol>
-  </FormRow>
-  <FormRow>
-    <FormCol cols={12} sm={6}>
-      <FormTextarea id="address" bind:value={match.address} required>Adresse</FormTextarea>
-    </FormCol>
-    <FormCol cols={12} sm={6}>
-      <div class="mb-2">
-        <FormGroup id="city" bind:value={match.city} required>Ville</FormGroup>
-      </div>
-      <div>
-        <FormGroup id="zipCode" bind:value={match.zipCode} required>Code postal</FormGroup>
-      </div>
-    </FormCol>
-  </FormRow>
-  <FormRow>
-    <FormCol>
-      <FormCheckbox id="whiteOnOdds" bind:checked={match.whiteOnOdds}>
-        Blancs aux échiquiers impairs
-      </FormCheckbox>
-    </FormCol>
-  </FormRow>
-  <FormRow>
-    <FormCol>
-      <FormLabel>Composition</FormLabel>
-      <LineUpTable {players} />
-    </FormCol>
-  </FormRow>
-  <FormRow>
-    <FormSubmit submitText="Valider" />
-  </FormRow>
-</Form>
+<form on:submit|preventDefault={() => handleSubmit(match)}>
+  <FormContainer>
+    <section class="row">
+      <article class="col-12 col-sm-4">
+        <label class="form-label required" for="season">Saison</label>
+        <input
+          class="form-control"
+          type="number"
+          id="season"
+          placeholder="2023"
+          bind:value={match.season}
+          required
+        />
+      </article>
+      <article class="col-12 col-sm-2">
+        <label class="form-label required" for="round">Ronde</label>
+        <input
+          class="form-control"
+          type="number"
+          id="round"
+          placeholder="1"
+          min="1"
+          bind:value={match.round}
+          required
+        />
+      </article>
+      <article class="col-12 col-sm-6">
+        <label class="form-label required" for="date">Date</label>
+        <input
+          class="form-control"
+          type="date"
+          id="date"
+          value={getDatePortion(match.date)}
+          on:input={updateDate}
+          required
+        />
+      </article>
+    </section>
+    <section class="row">
+      <article class="col-12 col-sm-6">
+        <label class="form-label required" for="opponent">Adversaire</label>
+        <input
+          class="form-control"
+          type="text"
+          id="opponent"
+          bind:value={match.opponent}
+          required
+        />
+      </article>
+      <article class="col-12 col-sm-6">
+        <label class="form-label required" for="teamName">Équipe</label>
+        <input
+          class="form-control"
+          type="text"
+          id="teamName"
+          bind:value={match.teamName}
+          required
+        />
+      </article>
+    </section>
+    <section class="row">
+      <article class="col-12 col-sm-6 d-flex flex-column">
+        <label class="form-label required" for="address">Adresse</label>
+        <div class="flex-grow-1">
+          <textarea id="address" class="h-100 form-control" bind:value={match.address} required />
+        </div>
+      </article>
+      <article class="col-12 col-sm-6">
+        <div class="mb-2">
+          <label class="form-label required" for="city">Ville</label>
+          <input class="form-control" type="text" id="city" bind:value={match.city} required />
+        </div>
+        <div>
+          <label class="form-label required" for="zipCode">Code postal</label>
+          <input
+            class="form-control"
+            type="text"
+            id="zipCode"
+            bind:value={match.zipCode}
+            required
+          />
+        </div>
+      </article>
+    </section>
+    <section class="row">
+      <article class="col-12">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="whiteOnOdds"
+            bind:checked={match.whiteOnOdds}
+          />
+          <label class="form-check-label" for="whiteOnOdds">Blancs aux échiquiers impairs</label>
+        </div>
+      </article>
+    </section>
+    <section class="row">
+      <article class="col-12">
+        <label class="form-label" for="lineup">Composition</label>
+        <LineupTable {players} {match} />
+      </article>
+    </section>
+    <FormSubmitRow />
+  </FormContainer>
+</form>
+
+{#if errors}
+  <FormErrors {errors} />
+{/if}

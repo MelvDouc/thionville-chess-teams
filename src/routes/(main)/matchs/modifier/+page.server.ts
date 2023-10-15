@@ -1,6 +1,6 @@
-import PlayerRole from "$lib/PlayerRole.js";
-import { getMatch } from "$lib/server/models/match.model.js";
-import { getPlayers } from "$lib/server/models/player.model.js";
+import PlayerRole from "$lib/PlayerRole";
+import { getMatch } from "$lib/server/models/match.model";
+import { getPlayers } from "$lib/server/models/player.model";
 import { error } from "@sveltejs/kit";
 import { ObjectId } from "mongodb";
 
@@ -15,9 +15,12 @@ export async function load({ url, locals: { user } }) {
   if (!match || !user || user.role > PlayerRole.CAPTAIN)
     throw error(404);
 
+  // @ts-expect-error - Ignore _id.
+  delete match._id;
   const players = await getPlayers();
   return {
     match,
+    _id,
     players
   };
 }

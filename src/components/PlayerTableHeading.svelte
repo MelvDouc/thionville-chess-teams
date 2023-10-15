@@ -1,16 +1,19 @@
 <script lang="ts">
-  import playerTableStore from "$lib/stores/player-table.store.js";
-  import sortOrderStore, { getNextSortOrder } from "$lib/stores/sort-order.store.js";
-  export let sortFn: (a: App.IndexedPlayer, b: App.IndexedPlayer) => number;
+  import playersStore from "$lib/stores/players.store";
+  import sortOrderStore from "$lib/stores/sort-order.store";
+  import type { IndexedPlayer } from "$lib/types";
+
+  export let sortFn: (a: IndexedPlayer, b: IndexedPlayer) => number;
+  export let defaultOrder = 0;
 
   const key = Symbol();
-  let sortOrder = 0;
+  let sortOrder: number;
 
   sortOrderStore.update(({ current, sortOrders }) => ({
     current,
     sortOrders: {
       ...sortOrders,
-      [key]: sortOrder,
+      [key]: defaultOrder,
     },
   }));
 
@@ -20,18 +23,18 @@
     if (current !== key) return;
 
     if (sortOrder === 0) {
-      playerTableStore.update((players) => players.sort((a, b) => a.index - b.index));
+      playersStore.sort((a, b) => a.index - b.index);
       return;
     }
 
-    playerTableStore.update((players) => players.sort((a, b) => sortFn(a, b) * sortOrder));
+    playersStore.sort((a, b) => sortFn(a, b) * sortOrder);
   });
 
   function sort() {
     sortOrderStore.update(({ sortOrders }) => ({
       current: key,
       sortOrders: Object.getOwnPropertySymbols(sortOrders).reduce((acc, k) => {
-        acc[k] = k === key ? getNextSortOrder(sortOrders[k]) : 0;
+        acc[k] = k === key ? sortOrderStore.getNextSortOrder(sortOrders[k]) : 0;
         return acc;
       }, {} as typeof sortOrders),
     }));

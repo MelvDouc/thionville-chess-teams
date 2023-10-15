@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { formatDate } from "$lib/date-formatter.js";
+  import { formatDate } from "$lib/services/date.service";
+  import type { WithIdMatch } from "$lib/types";
 
   export let data: {
     season: number;
-    matches: Record<string, WithId<App.Match>[]>;
+    matches: Record<string, WithIdMatch[]>;
   };
 </script>
 
@@ -48,7 +49,7 @@
                   <i class="bi bi-pen-fill" />
                 </a>
                 <a
-                  href="/matchs/{season}/{round}/{teamName}/composition"
+                  href="/matchs/composition?saison={season}&ronde={round}&equipe={teamName}"
                   class="btn btn-warning"
                   target="_blank"
                 >

@@ -1,10 +1,11 @@
 <script lang="ts">
   import Footer from "$components/Footer.svelte";
   import Header from "$components/Header.svelte";
+  import type { User } from "$lib/types";
   import "$styles/main.scss";
   import { afterUpdate } from "svelte";
 
-  export let data: { user: App.User | null };
+  export let data: { user: User | null };
   const SITE_TITLE = "Thionville Échecs — Équipes";
 
   afterUpdate(() => {

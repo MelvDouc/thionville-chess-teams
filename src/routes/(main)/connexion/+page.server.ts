@@ -1,7 +1,8 @@
-import { logIn } from "$lib/auth.js";
-import { toObject } from "$lib/form-data.js";
-import { isCorrectPassword } from "$lib/password.js";
-import { db } from "$lib/server/database.js";
+import { toObject } from "$lib/form-data";
+import { getPlayer } from "$lib/server/models/player.model";
+import { logIn } from "$lib/services/auth.service";
+import { isCorrectPassword } from "$lib/services/password.service";
+import type { Player } from "$lib/types";
 import { error, redirect } from "@sveltejs/kit";
 
 export const actions = {
@@ -9,11 +10,12 @@ export const actions = {
     if (locals.user)
       throw error(404);
 
-    const { ffeId, pwd } = toObject<Required<Pick<App.Player, "ffeId" | "pwd">>>(await request.formData());
-    const user = await db.players.find({ ffeId }).tryNext();
+    const { ffeId, pwd } = toObject<Required<Pick<Player, "ffeId" | "pwd">>>(await request.formData());
+    const user = await getPlayer({ ffeId });
 
     if (!user || !user.pwd || !(await isCorrectPassword(pwd, user.pwd)))
       return {
+        success: false,
         errors: ["Identifiants invalides."]
       };
 

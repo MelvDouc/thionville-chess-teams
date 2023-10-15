@@ -1,36 +1,35 @@
 <script lang="ts">
-  import Form from "$components/form/Form.svelte";
-  import FormCol from "$components/form/FormCol.svelte";
-  import FormGroup from "$components/form/FormGroup.svelte";
-  import FormRow from "$components/form/FormRow.svelte";
-  import FormSubmit from "$components/form/FormSubmit.svelte";
+  import FormContainer from "$components/form/FormContainer.svelte";
+  import FormErrors from "$components/form/FormErrors.svelte";
+  import FormSubmitRow from "$components/form/FormSubmitRow.svelte";
 
-  export let form: App.Form;
+  export let form: { errors: string[] } | never;
 </script>
 
 <svelte:head>
   <title>Connexion</title>
 </svelte:head>
 
-<Form method="POST" errors={form?.errors ?? null}>
-  <FormRow>
-    <FormCol>
-      <FormGroup id="ffeId" required>Code FFE</FormGroup>
-    </FormCol>
-  </FormRow>
-  <FormRow>
-    <FormCol>
-      <FormGroup id="pwd" type="password" required>Mot de passe</FormGroup>
-    </FormCol>
-  </FormRow>
-  <FormRow>
-    <FormCol>
-      <FormSubmit submitText="Se connecter" />
-    </FormCol>
-  </FormRow>
-  <FormRow>
-    <p class="mb-0">
-      <a href="/oubli-mot-de-passe">Mot de passe oublié ?</a>
-    </p>
-  </FormRow>
-</Form>
+<form action="/connexion" method="POST">
+  <FormContainer>
+    <section class="row">
+      <article class="col">
+        <label class="form-label required" for="ffeId">Code FFE</label>
+        <input class="form-control" type="text" name="ffeId" id="ffeId" required />
+      </article>
+    </section>
+    <section class="row">
+      <article class="col">
+        <label class="form-label required" for="pwd">Mot de passe</label>
+        <input class="form-control" type="password" name="pwd" id="pwd" required />
+      </article>
+    </section>
+    <FormSubmitRow />
+  </FormContainer>
+</form>
+
+<p class="mt-2"><a href="/oubli-mot-de-passe">Mot de passe oublié ?</a></p>
+
+{#if form?.errors}
+  <FormErrors errors={form.errors} />
+{/if}

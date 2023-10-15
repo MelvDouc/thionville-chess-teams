@@ -1,8 +1,9 @@
 <script lang="ts">
   import HeaderDropdown from "$components/HeaderDropdown.svelte";
   import LogOutButton from "$components/LogOutButton.svelte";
+  import type { User } from "$lib/types";
 
-  export let user: App.User | null;
+  export let user: User | null;
   export let title: string;
 </script>
 
@@ -34,20 +35,12 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           {#if user}
             <HeaderDropdown mainText="Matchs">
-              <li>
-                <a href="/matchs" class="dropdown-item">Matchs</a>
-              </li>
-              <li>
-                <a href="/matchs/nouveau" class="dropdown-item">Ajouter un match</a>
-              </li>
+              <li><a href="/matchs" class="dropdown-item">Matchs</a></li>
+              <li><a href="/matchs/nouveau" class="dropdown-item">Ajouter un match</a></li>
             </HeaderDropdown>
             <HeaderDropdown mainText="Joueurs">
-              <li>
-                <a href="/joueurs" class="dropdown-item">Liste</a>
-              </li>
-              <li>
-                <a href="/joueurs/nouveau" class="dropdown-item">Ajouter un joueur</a>
-              </li>
+              <li><a href="/joueurs" class="dropdown-item">Liste</a></li>
+              <li><a href="/joueurs/nouveau" class="dropdown-item">Ajouter un joueur</a></li>
             </HeaderDropdown>
           {/if}
         </ul>

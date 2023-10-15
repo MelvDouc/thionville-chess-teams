@@ -1,13 +1,10 @@
-import { deletePlayer } from "$lib/server/models/player.model.js";
+import { deletePlayer } from "$lib/server/models/player.model";
+import { error, json } from "@sveltejs/kit";
 
 export async function DELETE({ locals: { user }, params: { ffeId } }) {
   if (!user)
-    return new Response(
-      JSON.stringify({ success: false })
-    );
+    throw error(401);
 
-  const deleteResult = await deletePlayer(ffeId, user);
-  return new Response(
-    JSON.stringify({ success: !!deleteResult?.acknowledged })
-  );
+  const response = await deletePlayer(ffeId, user);
+  return json(response);
 }

@@ -1,4 +1,4 @@
-import { getUser } from "./lib/auth.js";
+import { getUser } from "$lib/services/auth.service";
 
 export async function handle({ event, resolve }) {
   const user = getUser(event.cookies);

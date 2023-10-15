@@ -1,15 +1,8 @@
 <script lang="ts">
   import ScoresheetLineupTable from "$components/ScoresheetLineupTable.svelte";
+  import type { ScoreSheetData } from "$lib/types";
 
-  export let data: {
-    date: string;
-    city: string;
-    round: number;
-    season: string;
-    referee: string;
-    odd: Scoresheet.Team;
-    even: Scoresheet.Team;
-  };
+  export let data: ScoreSheetData;
 
   const { date, city, round, season, even, odd, referee } = data;
 </script>

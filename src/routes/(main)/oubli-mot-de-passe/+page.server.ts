@@ -1,6 +1,7 @@
-import { toObject } from "$lib/form-data.js";
-import { PasswordResetTemplate, sendEmail } from "$lib/server/email.js";
-import { getPlayer, updatePlayer } from "$lib/server/models/player.model.js";
+import { toObject } from "$lib/form-data";
+import { getPlayer, updatePlayer } from "$lib/server/models/player.model";
+import { PasswordResetTemplate, sendEmail } from "$lib/services/email.service";
+import type { Player } from "$lib/types";
 import { error } from "@sveltejs/kit";
 
 export const actions = {
@@ -8,7 +9,7 @@ export const actions = {
     if (locals.user)
       throw error(404);
 
-    const { ffeId } = toObject<Pick<App.Player, "ffeId">>(await request.formData());
+    const { ffeId } = toObject<Pick<Player, "ffeId">>(await request.formData());
     const player = await getPlayer({ ffeId });
 
     if (!player)
@@ -35,9 +36,6 @@ export const actions = {
         pwdResetId
       })
     });
-
-    return {
-      success: true,
-    };
+    return { success: true, email: player.email };
   }
 };

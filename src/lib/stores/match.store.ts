@@ -1,19 +1,20 @@
+import type { Match, WithIdMatch } from "$lib/types";
 import { writable } from "svelte/store";
 
-const { set, update, subscribe } = writable<WithId<App.Match>>();
+const { set, update, subscribe } = writable<WithIdMatch>();
 
-function getEmptyLineUp() {
-  const emptyLineUp = {} as App.Match["lineup"];
+function getEmptyLineup() {
+  const emptyLineup = {} as Match["lineup"];
 
   for (let i = 1; i <= 8; i++)
-    emptyLineUp[i] = null;
+    emptyLineup[i] = null;
 
-  return emptyLineUp;
+  return emptyLineup;
 };
 
 export default {
   set,
   update,
   subscribe,
-  getEmptyLineUp
+  getEmptyLineup
 };
