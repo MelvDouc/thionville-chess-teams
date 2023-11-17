@@ -108,7 +108,7 @@
   {/each}
 </datalist>
 
-<style scoped>
+<style>
   .ratingInput {
     min-width: 2rem;
     max-width: 5rem;

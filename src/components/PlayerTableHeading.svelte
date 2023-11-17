@@ -47,7 +47,7 @@
   </span>
 </th>
 
-<style lang="scss" scoped>
+<style lang="scss">
   span {
     user-select: none;
     position: relative;

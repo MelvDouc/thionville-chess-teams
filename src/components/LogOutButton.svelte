@@ -16,7 +16,7 @@
   <input title="Se déconnecter" type="submit" value={user.ffeId} />
 </form>
 
-<style scoped>
+<style lang="scss">
   input {
     all: unset;
     cursor: pointer;

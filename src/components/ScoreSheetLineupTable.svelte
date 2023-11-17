@@ -44,7 +44,7 @@
   </tbody>
 </table>
 
-<style lang="scss" scoped>
+<style lang="scss">
   table {
     border: var(--table-border);
     border-collapse: collapse;

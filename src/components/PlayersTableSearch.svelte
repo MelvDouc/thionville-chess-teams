@@ -9,7 +9,7 @@
   </button>
 </div>
 
-<style lang="scss" scoped>
+<style lang="scss">
   div {
     --input-width: min(100%, 500px);
     position: relative;

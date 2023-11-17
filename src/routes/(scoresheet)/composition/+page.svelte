@@ -69,7 +69,7 @@
   <p>À renvoyer à : <span contenteditable>....................</span></p>
 </footer>
 
-<style lang="scss" scoped>
+<style lang="scss">
   header {
     h1 {
       text-transform: uppercase;

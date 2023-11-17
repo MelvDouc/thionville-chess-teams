@@ -16,7 +16,7 @@
   {/each}
 </ul>
 
-<style lang="scss" scoped>
+<style lang="scss">
   ul {
     list-style-type: disclosure-closed;
     list-style-position: inside;
