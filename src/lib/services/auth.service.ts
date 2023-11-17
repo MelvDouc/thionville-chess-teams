@@ -1,16 +1,21 @@
-import { COOKIE_AUTH_KEY, JWT_PRIVATE_KEY } from "$env/static/private";
+import { JWT_PRIVATE_KEY } from "$env/static/private";
 import type { User } from "$lib/types";
 import type { Cookies } from "@sveltejs/kit";
 import jwt from "jsonwebtoken";
+
+const COOKIE_AUTH_KEY = "auth_token_bc60c07ee13e";
 
 export function logIn(cookies: Cookies, user: User) {
   const token = jwt.sign(user, JWT_PRIVATE_KEY, {
     expiresIn: "365d"
   });
+  const today = new Date();
   cookies.set(COOKIE_AUTH_KEY, token, {
     httpOnly: true,
-    sameSite: "strict",
-    maxAge: 60 * 60 * 24 * 365
+    secure: true,
+    sameSite: "none",
+    path: "/",
+    expires: new Date(today.getFullYear() + 1, today.getMonth(), today.getDate())
   });
 }
 
