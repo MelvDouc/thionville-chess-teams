@@ -2,7 +2,7 @@
   import Footer from "$components/Footer.svelte";
   import Header from "$components/Header.svelte";
   import type { User } from "$lib/types";
-  import "$styles/main.scss";
+  import mainCSS from "$styles/main.scss?inline";
   import { afterUpdate } from "svelte";
 
   export let data: { user: User | null };
@@ -11,6 +11,10 @@
   afterUpdate(() => {
     document.title = `${document.title} | ${SITE_TITLE}`;
   });
+
+  function addInlineCSS(element: HTMLStyleElement) {
+    element.innerHTML = mainCSS;
+  }
 </script>
 
 <svelte:head>
@@ -31,6 +35,7 @@
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"
   ></script>
+  <style use:addInlineCSS></style>
 </svelte:head>
 
 <Header title={SITE_TITLE} user={data.user} />
