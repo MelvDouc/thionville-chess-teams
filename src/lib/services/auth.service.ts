@@ -1,10 +1,10 @@
 import { COOKIE_AUTH_KEY, JWT_PRIVATE_KEY } from "$env/static/private";
 import type { User } from "$lib/types";
 import type { Cookies } from "@sveltejs/kit";
-import { sign, verify, type JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export function logIn(cookies: Cookies, user: User) {
-  const token = sign(user, JWT_PRIVATE_KEY, {
+  const token = jwt.sign(user, JWT_PRIVATE_KEY, {
     expiresIn: "365d"
   });
   cookies.set(COOKIE_AUTH_KEY, token, {
@@ -25,7 +25,7 @@ export function getUser(cookies: Cookies): User | null {
     return null;
 
   try {
-    const user = verify(token, JWT_PRIVATE_KEY) as JwtPayload;
+    const user = jwt.verify(token, JWT_PRIVATE_KEY) as jwt.JwtPayload;
     return isUser(user) ? user : null;
   } catch (error) {
     console.log(error);
