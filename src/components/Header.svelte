@@ -35,7 +35,7 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           {#if user}
             <HeaderDropdown mainText="Matchs">
-              <li><a href="/matchs" class="dropdown-item">Matchs</a></li>
+              <li><a href="/matchs" class="dropdown-item">Par saison</a></li>
               <li><a href="/matchs/nouveau" class="dropdown-item">Ajouter un match</a></li>
             </HeaderDropdown>
             <HeaderDropdown mainText="Joueurs">
