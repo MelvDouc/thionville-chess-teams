@@ -107,5 +107,6 @@ export type ScoreSheetData = {
   city: string;
   round: number;
   season: string;
+  teamName: string;
   referee: string;
 } & { [K in Parity]: ScoreSheetTeam };

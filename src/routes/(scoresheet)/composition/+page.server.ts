@@ -42,6 +42,7 @@ export async function load({ url: { searchParams } }) {
     season: `${match.season - 1}-${match.season}`,
     round: match.round,
     city: match.city,
+    teamName: match.teamName,
     referee: ".".repeat(20),
     [parity as "odd"]: {
       lineup: parityLineup,

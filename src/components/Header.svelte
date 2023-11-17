@@ -48,7 +48,7 @@
           {#if user}
             <LogOutButton {user} />
           {:else}
-            <a href="/connexion" class="nav-link">Se connecter</a>
+            <a href="/@/connexion" class="nav-link">Se connecter</a>
           {/if}
         </span>
       </div>

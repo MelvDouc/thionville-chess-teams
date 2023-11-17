@@ -14,9 +14,9 @@
 </svelte:head>
 
 {#if form?.success}
-  <p>Un lien de réinitialisation vous a été envoyé à <em>{form.email}</em>.</p>
+  <p>Un lien de réinitialisation vous a été envoyé à <strong>{form.email}</strong>.</p>
 {:else}
-  <form action="/oubli-mot-de-passe" method="POST">
+  <form action="/@/oubli-mot-de-passe" method="POST">
     <FormContainer>
       <section class="row">
         <article class="col">

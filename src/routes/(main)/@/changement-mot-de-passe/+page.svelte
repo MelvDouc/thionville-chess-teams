@@ -17,13 +17,19 @@
 
 {#if form?.success}
   <p>
-    Votre mot de passe a bien été mis à jour. Vous pouvez désormais <a href="/connexion"
+    Votre mot de passe a bien été mis à jour. Vous pouvez désormais <a href="/@/connexion"
       >vous connecter</a
     >.
   </p>
 {:else}
   <form use:setAction method="POST">
     <FormContainer>
+      <section class="row">
+        <article class="col">
+          <label class="form-label required" for="email">Email</label>
+          <input class="form-control" type="email" name="email" id="email" required />
+        </article>
+      </section>
       <section class="row">
         <article class="col">
           <label class="form-label required" for="pwd">Nouveau mot de passe</label>

@@ -10,7 +10,7 @@
   <title>Connexion</title>
 </svelte:head>
 
-<form action="/connexion" method="POST">
+<form action="/@/connexion" method="POST">
   <FormContainer>
     <section class="row">
       <article class="col">
@@ -28,7 +28,7 @@
   </FormContainer>
 </form>
 
-<p class="mt-2"><a href="/oubli-mot-de-passe">Mot de passe oublié ?</a></p>
+<p class="mt-2"><a href="/@/oubli-mot-de-passe">Mot de passe oublié ?</a></p>
 
 {#if form?.errors}
   <FormErrors errors={form.errors} />

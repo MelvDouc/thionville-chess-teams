@@ -27,16 +27,19 @@ export function PasswordResetTemplate({ firstName, urlOrigin, pwdResetId }: {
   urlOrigin: string;
   pwdResetId: string;
 }) {
-  const link = `${urlOrigin}/changement-mot-de-passe?id=${pwdResetId}`;
+  const link = `${urlOrigin}/@/changement-mot-de-passe?id=${pwdResetId}`;
 
   return `
-    <main>
+    <main style="font-family: Verdana, Helvetica, Arial, sans-serif;">
       <p>Bonjour ${firstName},</p>
-      <div style="margin-bottom: 2em;">
-        <p>Vous avez demandé la réinitialisation de votre mot de passe. Pour ce faire, veuillez suivre le lien ci-dessous :</p>
-        <p><a href="${link}">${link}</a></p>
-      </div>
-      <p>À bientôt,<br />L'admin de Thionville Échecs – Équipes</p>
+      <p>
+        <div>Vous avez demandé la réinitialisation de votre mot de passe. Pour ce faire, veuillez suivre le lien ci-dessous :</div>
+        <div><a href="${link}">${link}</a></div>
+      </p>
+      <p>
+        <div>À bientôt,</div>
+        <div>L'admin de <strong>Thionville Échecs – Équipes</strong></div>
+      </p>
     </main>
   `.trim();
 }

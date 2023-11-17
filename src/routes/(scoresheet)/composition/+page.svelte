@@ -1,14 +1,14 @@
 <script lang="ts">
-  import ScoresheetLineupTable from "$components/ScoresheetLineupTable.svelte";
+  import ScoreSheetLineupTable from "$components/ScoreSheetLineupTable.svelte";
   import type { ScoreSheetData } from "$lib/types";
 
   export let data: ScoreSheetData;
 
-  const { date, city, round, season, even, odd, referee } = data;
+  const { date, city, round, season, even, odd, referee, teamName } = data;
 </script>
 
 <svelte:head>
-  <title>{date}_rd{round}_feuille-de-match</title>
+  <title>Feuille de match - {date} - ronde {round} - {teamName}</title>
 </svelte:head>
 
 <header>
@@ -37,11 +37,11 @@
 
   <div class="lineup-tables">
     <section>
-      <ScoresheetLineupTable parity="impairs" team={odd} />
+      <ScoreSheetLineupTable parity="impairs" team={odd} />
     </section>
 
     <section>
-      <ScoresheetLineupTable parity="pairs" team={even} />
+      <ScoreSheetLineupTable parity="pairs" team={even} />
     </section>
   </div>
 

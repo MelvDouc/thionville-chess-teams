@@ -49,7 +49,7 @@
                   <i class="bi bi-pen-fill" />
                 </a>
                 <a
-                  href="/matchs/composition?saison={season}&ronde={round}&equipe={teamName}"
+                  href="/composition?saison={season}&ronde={round}&equipe={teamName}"
                   class="btn btn-warning"
                   target="_blank"
                 >

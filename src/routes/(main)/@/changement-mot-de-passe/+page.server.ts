@@ -4,20 +4,18 @@ import { error } from "@sveltejs/kit";
 
 export const actions = {
   default: async ({ request, locals: { user }, url }) => {
-    if (user)
-      throw error(404);
+    if (user) throw error(404);
 
     const pwdResetId = url.searchParams.get("id");
-
-    if (!pwdResetId)
-      throw error(404);
+    if (!pwdResetId) throw error(404);
 
     const player = await getPlayer({ pwdResetId });
+    if (!player) throw error(404);
 
-    if (!player)
+    const { email, pwd, pwd2 } = toObject<PasswordResetFormData>(await request.formData());
+
+    if (email.trim() !== player.email)
       throw error(404);
-
-    const { pwd, pwd2 } = toObject<{ pwd: string; pwd2: string; }>(await request.formData());
 
     if (!pwd || pwd !== pwd2)
       return {
@@ -28,4 +26,10 @@ export const actions = {
     await updatePlayerPassword(player.ffeId, pwd);
     return { success: true };
   }
+};
+
+type PasswordResetFormData = {
+  email: string;
+  pwd: string;
+  pwd2: string;
 };
