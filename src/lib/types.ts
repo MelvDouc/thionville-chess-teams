@@ -68,6 +68,7 @@ export interface Match {
    */
   lineup: (MatchLineupItem | null)[];
   captainFfeId: Player["ffeId"] | null;
+  refereeFfeId: Player["ffeId"] | null;
 }
 
 export type WithIdMatch = WithId<Match>;

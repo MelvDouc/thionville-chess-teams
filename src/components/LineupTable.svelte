@@ -21,6 +21,10 @@
     };
   });
 
+  $: refereeName = match.refereeFfeId
+    ? `${playersRecord[match.refereeFfeId].firstName} ${playersRecord[match.refereeFfeId].lastName}`
+    : "";
+
   function getBoardLabel(board: number) {
     const isOddBoard = board % 2 !== 0;
     const color = isOddBoard === match.whiteOnOdds ? "B" : "N";
@@ -33,8 +37,19 @@
     if (ffeId) match.captainFfeId = ffeId;
   }
 
-  function setPlayer(e: Event, index: number) {
+  function setRefereeFfeId(e: Event) {
     const ffeId = (e.target as HTMLInputElement).value;
+
+    if (ffeId && ffeId in playersRecord) {
+      match.refereeFfeId = ffeId;
+      return;
+    }
+
+    match.refereeFfeId = null;
+  }
+
+  function setPlayer({ target }: Event, index: number) {
+    const ffeId = (target as HTMLInputElement).value;
 
     if (!ffeId) {
       match.lineup[index] = null;
@@ -73,6 +88,7 @@
           <td>
             <input
               type="text"
+              class="playerInput"
               list="players-dl"
               value={fullName}
               on:input={(e) => setPlayer(e, i)}
@@ -83,7 +99,7 @@
             <input
               type="number"
               class="ratingInput"
-              value={rating}
+              value={rating || ""}
               on:input={(e) => setRating(e, i)}
             />
           </td>
@@ -92,12 +108,25 @@
               type="radio"
               name="captainFfeId"
               value={ffeId}
-              checked={match.captainFfeId === ffeId}
+              checked={!!match.captainFfeId && match.captainFfeId === ffeId}
               on:change={(e) => setCaptainFfeId(e, i)}
             />
           </td>
         </tr>
       {/each}
+      <tr>
+        <td colspan="5" class="text-center">
+          <input
+            type="text"
+            class="playerInput"
+            name="refereeFfeId"
+            placeholder="Arbitre..."
+            list="players-dl"
+            value={refereeName}
+            on:input={setRefereeFfeId}
+          />
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>
@@ -109,6 +138,10 @@
 </datalist>
 
 <style>
+  .playerInput {
+    width: min(100%, 450px);
+  }
+
   .ratingInput {
     min-width: 2rem;
     max-width: 5rem;
