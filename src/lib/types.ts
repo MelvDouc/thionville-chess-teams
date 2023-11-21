@@ -73,6 +73,11 @@ export interface Match {
 
 export type WithIdMatch = WithId<Match>;
 
+export interface MatchWithPlayerDetails extends Match {
+  board: number;
+  hasWhite: boolean;
+}
+
 // ===== ===== ===== ===== =====
 // RESPONSE
 // ===== ===== ===== ===== =====

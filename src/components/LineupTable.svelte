@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Match, PublicPlayer } from "$lib/types";
+  import { formatPlayerName } from "$lib/utils/string-utils.js";
 
   export let players: PublicPlayer[];
   export let match: Match;
@@ -15,15 +16,13 @@
 
     return {
       board,
-      fullName: player ? `${player.firstName} ${player.lastName}` : "",
+      fullName: player ? formatPlayerName(player) : "",
       ffeId: player?.ffeId ?? "",
       rating: player?.rating ?? 0,
     };
   });
 
-  $: refereeName = match.refereeFfeId
-    ? `${playersRecord[match.refereeFfeId].firstName} ${playersRecord[match.refereeFfeId].lastName}`
-    : "";
+  $: refereeName = match.refereeFfeId ? formatPlayerName(playersRecord[match.refereeFfeId]) : "";
 
   function getBoardLabel(board: number) {
     const isOddBoard = board % 2 !== 0;
@@ -132,8 +131,8 @@
 </div>
 
 <datalist id="players-dl">
-  {#each players as { firstName, lastName, ffeId }}
-    <option value={ffeId}>{firstName} {lastName}</option>
+  {#each players as player}
+    <option value={player.ffeId}>{formatPlayerName(player)}</option>
   {/each}
 </datalist>
 

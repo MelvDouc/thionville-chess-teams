@@ -3,9 +3,13 @@
   import PlayerCardItem from "$components/PlayerCardItem.svelte";
   import { roleTranslations } from "$lib/PlayerRole";
   import { getDatePortion } from "$lib/services/date.service";
-  import type { PublicPlayer, User } from "$lib/types";
+  import type { MatchWithPlayerDetails, PublicPlayer, User } from "$lib/types";
 
-  export let data: { player: PublicPlayer; user: User };
+  export let data: {
+    player: PublicPlayer;
+    matches: { season: number; matches: MatchWithPlayerDetails[] }[];
+    user: User;
+  };
 </script>
 
 <svelte:head>
@@ -71,6 +75,35 @@
     </PlayerCardItem>
   {/if}
 </div>
+
+<hr />
+
+<h2>Matchs joués</h2>
+
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th>Saison</th>
+      <th>Adversaire</th>
+      <th>Ville</th>
+      <th>Éch</th>
+    </tr>
+  </thead>
+  <tbody>
+    {#each data.matches as { season, matches }}
+      {#each matches as match}
+        <tr>
+          <td>{season}</td>
+          <td>{match.opponent}</td>
+          <td>{match.city}</td>
+          <td>{match.board}{match.hasWhite ? "B" : "N"}</td>
+        </tr>
+      {/each}
+    {/each}
+  </tbody>
+</table>
+
+<hr />
 
 <PlayerButtons playerFfeId={data.player.ffeId} playerRole={data.player.role} user={data.user} />
 

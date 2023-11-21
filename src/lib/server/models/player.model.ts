@@ -2,8 +2,8 @@ import PlayerRole from "$lib/PlayerRole";
 import { db } from "$lib/server/database";
 import { hashPassword } from "$lib/services/password.service";
 import { fetchRating } from "$lib/services/rating-scraper.service";
-import type { ApiResponse, Player, PublicPlayer, User } from "$lib/types";
-import type { Filter } from "mongodb";
+import type { ApiResponse, Match, MatchWithPlayerDetails, Player, PublicPlayer, User } from "$lib/types";
+import type { Filter, UpdateResult } from "mongodb";
 import { Cast as C, Validation as V } from "shape-and-form";
 
 const defaultError = "Une erreur s'est produite.";
@@ -54,6 +54,31 @@ export function getPlayers(): Promise<PublicPlayer[]> {
     .find()
     .map(({ _id, pwd, pwdResetId, ...others }) => others)
     .toArray();
+}
+
+export async function getPlayerMatches(ffeId: string) {
+  const matches: Record<number, MatchWithPlayerDetails[]> = {};
+
+  for await (const { _id, ...match } of db.matches.find()) {
+    for (let i = 0; i < match.lineup.length; i++) {
+      const item = match.lineup[i];
+      if (item?.ffeId === ffeId) {
+        const board = i + 1;
+        matches[match.season] ??= [];
+        matches[match.season].push({
+          ...match,
+          board,
+          hasWhite: (board % 2 === 1) === match.whiteOnOdds,
+        });
+        break;
+      }
+    }
+  }
+
+  return Object.entries(matches).reduce((acc, [season, matches]) => {
+    acc.push({ season: +season, matches });
+    return acc;
+  }, [] as { season: number; matches: MatchWithPlayerDetails[]; }[]);
 }
 
 export async function createPlayer(data: object, userRole: PlayerRole): Promise<ApiResponse & { insertedId?: string; }> {
@@ -129,13 +154,16 @@ export async function deletePlayer(ffeId: Player["ffeId"], user: User): Promise<
 }
 
 export async function updateRatings() {
-  const updates: Promise<unknown>[] = [];
+  const updates: Promise<UpdateResult<Player>>[] = [];
 
-  for await (const player of db.players.find()) {
-    if (!player.fideId) continue;
-    const rating = await fetchRating(player.fideId);
-    if (rating !== null)
-      updates.push(updatePlayer(player.ffeId, { rating }));
+  for await (const { _id, fideId } of db.players.find()) {
+    if (!fideId) continue;
+    const rating = await fetchRating(fideId);
+    if (rating === null) continue;
+    const update = db.players.updateOne({ _id }, {
+      $set: { rating }
+    });
+    updates.push(update);
   }
 
   await Promise.all(updates);

@@ -2,6 +2,8 @@ import { getLineup, getMatch } from "$lib/server/models/match.model";
 import { getDatePortion } from "$lib/services/date.service";
 import type { ScoreSheetData } from "$lib/types";
 import { error } from "@sveltejs/kit";
+import { getPlayer } from "$lib/server/models/player.model";
+import { formatPlayerName } from "$lib/utils/string-utils";
 
 export async function load({ url: { searchParams } }) {
   const match = await getMatch({
@@ -13,6 +15,10 @@ export async function load({ url: { searchParams } }) {
   if (!match)
     throw error(404);
 
+  const referee = match.refereeFfeId
+    ? (await getPlayer({ ffeId: match.refereeFfeId }))
+    : null;
+
   const parity = match.whiteOnOdds ? "odd" : "even";
   const oppositeParity = (parity === "odd") ? "even" : "odd";
 
@@ -21,7 +27,7 @@ export async function load({ url: { searchParams } }) {
     const isOddBoard = board % 2 === 1;
     return {
       board: board + (isOddBoard === match.whiteOnOdds ? "B" : "N"),
-      name: p ? `${p.firstName} ${p.lastName}` : "",
+      name: p ? formatPlayerName(p) : "",
       ffeId: p?.ffeId ?? "",
       rating: String(p?.rating ?? "")
     };
@@ -43,7 +49,7 @@ export async function load({ url: { searchParams } }) {
     round: match.round,
     city: match.city,
     teamName: match.teamName,
-    referee: ".".repeat(20),
+    referee: referee ? formatPlayerName(referee): ".".repeat(20),
     [parity as "odd"]: {
       lineup: parityLineup,
       club: match.teamName,

@@ -1,4 +1,4 @@
-import { getPlayer } from "$lib/server/models/player.model";
+import { getPlayer, getPlayerMatches } from "$lib/server/models/player.model";
 import { error } from "@sveltejs/kit";
 
 export async function load({ params: { ffeId }, locals: { user } }) {
@@ -7,5 +7,6 @@ export async function load({ params: { ffeId }, locals: { user } }) {
   if (!player)
     throw error(404);
 
-  return { player, user };
+  const matches = getPlayerMatches(ffeId);
+  return { player, matches, user };
 }
